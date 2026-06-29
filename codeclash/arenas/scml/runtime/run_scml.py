@@ -150,6 +150,10 @@ def normalize_offer(offer, nmi) -> tuple[tuple[int, int, int] | None, str | None
     for idx, raw_value in enumerate(offer):
         if isinstance(raw_value, np.generic):
             raw_value = raw_value.item()
+        if isinstance(raw_value, bool):
+            return None, f"offer item {idx} must be an integer"
+        if isinstance(raw_value, float) and raw_value.is_integer():
+            raw_value = int(raw_value)
         if not isinstance(raw_value, int):
             return None, f"offer item {idx} must be an integer"
         issue = issues[idx]
