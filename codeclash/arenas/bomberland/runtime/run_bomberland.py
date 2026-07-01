@@ -20,6 +20,11 @@ START_HP = 3
 START_BOMBS = 1
 BLAST_RADIUS = 3
 BOMB_TIMER = 6
+# How many ticks a blast (fire) cell stays active. It must be >= 2 so the cell
+# survives the start-of-tick decrement and is visible in the observation agents
+# receive on the following tick. While active, a blast damages any unit that
+# moves onto it.
+BLAST_TTL = 2
 
 
 def load_agent(name, path):
@@ -165,8 +170,8 @@ def entities_for_state(metal, wood, bombs, blasts):
                 "blast_diameter": bomb["radius"] * 2 - 1,
             }
         )
-    for (x, y), ttl in sorted(blasts.items()):
-        entities.append({"type": "x", "coordinates": [x, y], "ttl": ttl})
+    for (x, y), info in sorted(blasts.items()):
+        entities.append({"type": "x", "coordinates": [x, y], "ttl": info["ttl"]})
     return entities
 
 
@@ -241,7 +246,7 @@ def explode_bomb(index, bombs, metal, wood, units, stats, blasts):
         units[unit_id]["inventory"]["bombs"] += 1
 
     for cell in cells:
-        blasts[cell] = 1
+        blasts[cell] = {"ttl": BLAST_TTL, "owner": owner}
         if cell in wood:
             wood.remove(cell)
             stats[owner]["wood_destroyed"] += 1
@@ -345,6 +350,15 @@ def apply_actions(players, callbacks, agents, units, metal, wood, bombs, blasts,
             stats[player]["invalid_actions"] += 1
             continue
         units[unit_id]["coordinates"] = list(target)
+        blast = blasts.get(target)
+        if blast is not None:
+            unit = units[unit_id]
+            unit["hp"] -= 1
+            owner = blast["owner"]
+            if unit["agent_id"] != owner:
+                stats[owner]["damage_dealt"] += 1
+                if unit["hp"] <= 0:
+                    stats[owner]["kills"] += 1
 
 
 def tick_bombs(bombs, metal, wood, units, stats, blasts):
@@ -392,7 +406,7 @@ def run_game(players, callbacks, seed, ticks, width, height, unit_count, agent_t
     final_tick = 0
     for tick in range(ticks):
         final_tick = tick
-        blasts = {pos: ttl - 1 for pos, ttl in blasts.items() if ttl > 1}
+        blasts = {pos: {**info, "ttl": info["ttl"] - 1} for pos, info in blasts.items() if info["ttl"] > 1}
         apply_actions(
             players, callbacks, agents, units, metal, wood, bombs, blasts, stats, width, height, tick, agent_timeout
         )

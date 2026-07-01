@@ -12,11 +12,15 @@ def next_actions(game_state):
     return {"unit_0": "up"}
 ```
 
-Valid string actions are `up`, `down`, `left`, `right`, `bomb`, and `stay`.
+Valid string actions are `up`, `down`, `left`, `right`, `bomb`, `stay`, and
+`detonate` (blow up one of your own bombs early, e.g. `"detonate:x,y"` or
+`{"type": "detonate", "coordinates": [x, y]}`; bombs also explode on their timer).
 The game-state dictionary follows the upstream starter-kit shape where possible:
 `connection.agent_id` identifies the player, `agents[player].unit_ids` lists the
 controlled units, `unit_state` contains unit coordinates and health, and
-`entities` contains walls, destructible blocks, bombs, and blast tiles.
+`entities` contains walls, destructible blocks, bombs, and blast tiles (`x`).
+Blast tiles stay active briefly and damage any unit that stands on or moves onto
+them, so avoid walking into fire.
 
 Round simulation counts must be even so each player receives both starting sides.
 

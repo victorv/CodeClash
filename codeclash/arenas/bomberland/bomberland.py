@@ -22,9 +22,12 @@ The callable receives a game-state dictionary and should return a dictionary map
     def next_actions(game_state):
         return {"unit_0": "up"}
 
-Valid actions are `up`, `down`, `left`, `right`, `bomb`, and `stay`. Each round runs several
-deterministic seeded games. Your units move on a destructible grid, place bombs, destroy blocks,
-damage opposing units, and score by survival, damage, kills, and block destruction.
+Valid actions are `up`, `down`, `left`, `right`, `bomb`, `stay`, and `detonate` (to blow up one of
+your own bombs early, e.g. the string `"detonate:x,y"` or `{"type": "detonate", "coordinates": [x, y]}`;
+bombs also explode automatically after their timer). Each round runs several deterministic seeded
+games. Your units move on a destructible grid, place bombs, destroy blocks, damage opposing units,
+and score by survival, damage, kills, and block destruction. Bomb blasts (`x` entities) stay active
+briefly and damage any unit standing on or moving into them.
 """
     default_args: dict = {
         "sims_per_round": 4,
