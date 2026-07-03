@@ -5,6 +5,7 @@ Single entrypoint for CodeClash. Subcommands:
     codeclash ladder make <config>    build a ladder (round-robin ranking)
     codeclash ladder run <config>     send a model up a ranked ladder
     codeclash rank {win-rate,elo,matrix} ...   compute standings from logs
+    codeclash replay <log-folder>     browse/animate recorded games
 """
 
 import getpass
@@ -19,6 +20,7 @@ import yaml
 from codeclash import CONFIG_DIR
 from codeclash.cli.ladder import ladder_app
 from codeclash.cli.rank import rank_app
+from codeclash.cli.replay import replay
 from codeclash.constants import LOCAL_LOG_DIR
 from codeclash.tournaments.pvp import PvpTournament
 from codeclash.utils.aws import is_running_in_aws_batch
@@ -27,11 +29,13 @@ from codeclash.utils.yaml_utils import resolve_includes
 app = typer.Typer(
     no_args_is_help=True,
     add_completion=False,
+    rich_markup_mode="rich",  # enables the [dim] markup used in the Examples blocks
     context_settings={"help_option_names": ["-h", "--help"]},
     help="CodeClash: run coding-game tournaments, build ladders, and rank players.",
 )
 app.add_typer(ladder_app, name="ladder", help="Build and run CC:Ladder tournaments.")
 app.add_typer(rank_app, name="rank", help="Compute player standings from game logs.")
+app.command("replay")(replay)
 
 
 @app.command()
@@ -44,7 +48,11 @@ def run(
         False, "--keep-containers", "-k", help="Do not remove containers after games/agent finish."
     ),
 ):
-    """Run a PvP tournament from a config file."""
+    """Run a PvP tournament from a config file.
+
+    [dim]• codeclash run configs/test/battlesnake_pvp_test.yaml[/dim]
+    [dim]• codeclash run path/to/config.yaml -c -o out/  # cleanup + custom output dir[/dim]
+    """
     yaml_content = config_path.read_text()
     preprocessed_yaml = resolve_includes(yaml_content, base_dir=CONFIG_DIR)
     config = yaml.safe_load(preprocessed_yaml)
