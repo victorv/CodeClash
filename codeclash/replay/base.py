@@ -91,10 +91,6 @@ class ReplayRenderer(ABC):
     def parse(self, raw: bytes, players: list[dict] | None = None) -> ReplayData:
         """Decode raw sim bytes into a :class:`ReplayData`. Input format is opaque."""
 
-    def ascii(self, data: ReplayData) -> str:
-        """Optional terminal rendering; arenas override."""
-        raise NotImplementedError(f"{self.arena} has no ascii renderer")
-
 
 # --------------------------------------------------------------------------------------
 # Sim discovery + reading
@@ -130,7 +126,7 @@ def discover_games(folder: Path, sim_glob: str) -> list[GameRef]:
                 archived.add(rnum)
                 with tarfile.open(entry) as tf:
                     for m in tf.getmembers():
-                        if m.isfile() and fnmatch.fnmatch(Path(m.name).name, sim_glob):
+                        if m.isfile() and m.size > 0 and fnmatch.fnmatch(Path(m.name).name, sim_glob):
                             games.append(
                                 GameRef(round=rnum, sim=_sim_index(Path(m.name).name), archive=entry, member=m.name)
                             )
@@ -140,11 +136,11 @@ def discover_games(folder: Path, sim_glob: str) -> list[GameRef]:
             if entry.is_dir() and _round_num(entry.name) not in archived:
                 rnum = _round_num(entry.name)
                 for f in sorted(entry.iterdir()):
-                    if f.is_file() and fnmatch.fnmatch(f.name, sim_glob):
+                    if f.is_file() and f.stat().st_size > 0 and fnmatch.fnmatch(f.name, sim_glob):
                         games.append(GameRef(round=rnum, sim=_sim_index(f.name), path=f))
     else:
         for f in sorted(folder.iterdir()):
-            if f.is_file() and fnmatch.fnmatch(f.name, sim_glob):
+            if f.is_file() and f.stat().st_size > 0 and fnmatch.fnmatch(f.name, sim_glob):
                 games.append(GameRef(round=0, sim=_sim_index(f.name), path=f))
     games.sort(key=lambda g: (g.round, g.sim))
     return games
@@ -279,49 +275,45 @@ def _doc(head_extra: str, scripts: str) -> str:
     )
 
 
-def build_sim_stub(data: ReplayData, tour: dict, renderer: ReplayRenderer) -> str:
-    """Thin per-sim page: inlines only this game's data, references shared assets."""
-    slug = renderer.arena.lower()
-    head = f'<title>{renderer.arena} replay</title><link rel="stylesheet" href="assets/replay.css">'
+def build_page(data: ReplayData, tour: dict, renderer: ReplayRenderer) -> str:
+    """A complete, self-contained replay page (CSS + player + arena JS + data inlined).
+
+    Built on demand by the server and served straight from memory — nothing is written to
+    disk.
+    """
+    head = f"<title>{renderer.arena} replay</title><style>{SHELL_CSS}{renderer.CSS}</style>"
     scripts = (
         "<script>window.G="
         + _script_safe(data.payload)
         + ";window.TOUR="
         + _script_safe(tour)
         + ";</script>\n"
-        + f'<script src="assets/{slug}.js"></script>\n'
-        + '<script src="assets/player.js"></script>'
+        + "<script>"
+        + renderer.DRAW_JS
+        + "</script>\n"
+        + "<script>"
+        + PLAYER_JS
+        + "</script>"
     )
     return _doc(head, scripts)
 
 
-def write_assets(replay_dir: Path, renderer: ReplayRenderer) -> None:
-    """Write the shared player assets once (idempotent)."""
-    adir = replay_dir / "assets"
-    adir.mkdir(parents=True, exist_ok=True)
-    (adir / "replay.css").write_text(SHELL_CSS + renderer.CSS)
-    (adir / "player.js").write_text(PLAYER_JS)
-    (adir / f"{renderer.arena.lower()}.js").write_text(renderer.DRAW_JS)
-
-
-def build_index(tour: TournamentInfo, replay_dir: Path) -> str:
-    """Index page listing every game (round x sim) with its winner and a watch link."""
+def build_index(tour: TournamentInfo) -> str:
+    """Index page: every game (round x sim) with its winner, linking to its replay."""
     players = " vs ".join(p["name"] for p in tour.players)
     rows = []
     for g in tour.games:
-        href = f"r{g.round}_s{g.sim}.html"
         winner = tour.round_winners.get(g.round, "")
-        if (replay_dir / href).exists():
-            cell = f'<a href="{href}">&#9654; watch</a>'
-        else:
-            cell = f'<span class="muted">not generated &mdash; <code>codeclash replay . -r {g.round} -s {g.sim}</code></span>'
+        cell = f'<a class="btn" href="game?r={g.round}&s={g.sim}">&#9654; watch</a>'
         rows.append(f"<tr><td>{g.round}</td><td>{g.sim}</td><td>{winner}</td><td>{cell}</td></tr>")
     style = (
         "body{background:#0d1117;color:#e6edf3;font:14px system-ui,sans-serif;margin:0;padding:24px}"
         "h1{font-size:18px}.muted{color:#8b949e}"
         "table{border-collapse:collapse;margin-top:12px}"
         "td,th{padding:6px 14px;border-bottom:1px solid #21262d;text-align:left}"
-        "a{color:#58a6ff}code{background:#161b22;padding:1px 5px;border-radius:4px}"
+        "a{color:#58a6ff}"
+        ".btn{display:inline-block;padding:3px 10px;border:1px solid #30363d;border-radius:6px;"
+        "background:#21262d;color:#e6edf3;text-decoration:none}.btn:hover{background:#30363d}"
     )
     header = (
         f"<h1>{tour.arena} &middot; {players}</h1>"

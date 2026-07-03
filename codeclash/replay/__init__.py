@@ -17,10 +17,9 @@ from codeclash.replay.base import (
     ReplayRenderer,
     TournamentInfo,
     build_index,
-    build_sim_stub,
+    build_page,
     discover_games,
     read_sim,
-    write_assets,
 )
 
 __all__ = [
@@ -29,12 +28,11 @@ __all__ = [
     "ReplayRenderer",
     "TournamentInfo",
     "build_index",
-    "build_sim_stub",
+    "build_page",
     "discover_games",
     "get_replayer",
     "load_tournament",
     "read_sim",
-    "write_assets",
 ]
 
 

@@ -118,19 +118,3 @@ class BattleSnakeReplayer(ReplayRenderer):
             draw=result.get("isDraw", False),
             extra={"colors": colors},
         )
-
-    def ascii(self, data: ReplayData) -> str:
-        out = []
-        for f in data.frames:
-            grid = [["." for _ in range(data.w)] for _ in range(data.h)]
-            for fx, fy in f["food"]:
-                grid[fy][fx] = "*"
-            for s in f["snakes"]:
-                ch = s["name"][0].upper()
-                for j, (x, y) in enumerate(s["body"]):
-                    grid[y][x] = ch if j else ch.lower()  # head lowercase-ish marker
-            out.append(f"\n--- turn {f['turn']} ---  " + "  ".join(f"{s['name']}:{s['health']}" for s in f["snakes"]))
-            for row in reversed(grid):  # y-up: print top row last
-                out.append(" ".join(row))
-        out.append(f"\nWinner: {'TIE' if data.draw else data.winner}")
-        return "\n".join(out)

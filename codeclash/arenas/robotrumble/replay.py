@@ -155,27 +155,3 @@ class RobotRumbleReplayer(ReplayRenderer):
                 "errors": data.get("errors", {}),
             },
         )
-
-    def ascii(self, data: ReplayData) -> str:
-        W, H = data.w, data.h
-        names = data.extra["names"]
-        wall_set = {(x, y) for x, y in data.extra["walls"]}
-        out = []
-        for f in data.frames:
-            grid = [["#" if (x, y) in wall_set else "." for x in range(W)] for y in range(H)]
-            for u in f["units"]:
-                grid[u["y"]][u["x"]] = "B" if u["team"] == "Blue" else "R"
-            counts = {"Blue": 0, "Red": 0}
-            hp = {"Blue": 0, "Red": 0}
-            for u in f["units"]:
-                counts[u["team"]] += 1
-                hp[u["team"]] += u["hp"]
-            out.append(
-                f"\n--- turn {f['turn']} ---  "
-                f"{names['Blue']}(B): {counts['Blue']} units / {hp['Blue']} hp   "
-                f"{names['Red']}(R): {counts['Red']} units / {hp['Red']} hp"
-            )
-            for row in grid:
-                out.append(" ".join(row))
-        out.append(f"\nWinner: {'TIE' if data.draw else data.winner}")
-        return "\n".join(out)
