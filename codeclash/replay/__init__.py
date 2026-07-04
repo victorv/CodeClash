@@ -49,6 +49,38 @@ def get_replayer(arena: str) -> ReplayRenderer | None:
         from codeclash.arenas.robotrumble.replay import RobotRumbleReplayer
 
         return RobotRumbleReplayer()
+    if arena == "Chess":
+        from codeclash.arenas.chess.replay import ChessReplayer
+
+        return ChessReplayer()
+    if arena == "Gomoku":
+        from codeclash.arenas.gomoku.replay import GomokuReplayer
+
+        return GomokuReplayer()
+    if arena == "Halite":
+        from codeclash.arenas.halite.replay import HaliteReplayer
+
+        return HaliteReplayer()
+    if arena == "Halite2":
+        from codeclash.arenas.halite2.replay import Halite2Replayer
+
+        return Halite2Replayer()
+    if arena == "Halite3":
+        from codeclash.arenas.halite3.replay import Halite3Replayer
+
+        return Halite3Replayer()
+    if arena == "Bomberland":
+        from codeclash.arenas.bomberland.replay import BomberlandReplayer
+
+        return BomberlandReplayer()
+    if arena == "Bridge":
+        from codeclash.arenas.bridge.replay import BridgeReplayer
+
+        return BridgeReplayer()
+    if arena == "Figgie":
+        from codeclash.arenas.figgie.replay import FiggieReplayer
+
+        return FiggieReplayer()
     return None
 
 
@@ -79,6 +111,31 @@ def load_tournament(folder: Path) -> TournamentInfo:
     folder = Path(folder)
     meta_path = folder / "metadata.json"
     if not meta_path.exists():
+        # A ladder / aggregate folder is a parent of PvP sub-tournaments, each with its own
+        # metadata.json (e.g. LadderTournament.<Arena>.../ from `ladder run`, or logs/ladder/<Arena>/
+        # from `ladder make`). Merge every sub-tournament's games, tagged by matchup.
+        children = [d for d in sorted(folder.iterdir()) if d.is_dir() and (d / "metadata.json").exists()]
+        if children:
+            arena, players, games = _arena_from_name(folder), [], []
+            for child in children:
+                ct = load_tournament(child)
+                arena = arena or ct.arena
+                players = players or ct.players
+                matchup = ", ".join(p["name"] for p in ct.players) or child.name
+                for g in ct.games:
+                    g.group = matchup
+                    games.append(g)
+            games.sort(key=lambda g: (g.group, g.round, g.sim))
+            return TournamentInfo(
+                folder=folder,
+                arena=arena,
+                players=players,
+                rounds=None,
+                sims_per_round=None,
+                round_winners={},
+                games=games,
+            )
+        # Otherwise a bare sim folder — arena comes from the folder name.
         arena = _arena_from_name(folder)
         renderer = get_replayer(arena)
         games = discover_games(folder, renderer.sim_glob) if renderer else []
@@ -99,6 +156,8 @@ def load_tournament(folder: Path) -> TournamentInfo:
 
     renderer = get_replayer(arena)
     games = discover_games(folder, renderer.sim_glob) if renderer else []
+    for g in games:  # attach each game's round winner for the index
+        g.winner = round_winners.get(g.round)
 
     return TournamentInfo(
         folder=folder,

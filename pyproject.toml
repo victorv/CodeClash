@@ -32,6 +32,7 @@ dependencies = [
     "trueskill",
     "cdifflib",
     "typer",
+    "zstandard",  # decompress Halite2/3 .hlt replay files
 ]
 
 [project.scripts]

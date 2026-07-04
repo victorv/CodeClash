@@ -25,7 +25,6 @@ class _Server(socketserver.ThreadingTCPServer):
 
 def run_server(folder: Path, tour: TournamentInfo, renderer: ReplayRenderer, port: int = 8000) -> None:
     """Serve the folder's replays until interrupted, opening the index in a browser."""
-    games = {(g.round, g.sim): g for g in tour.games}
 
     def render_game(game) -> str:
         payload = {
@@ -33,7 +32,12 @@ def run_server(folder: Path, tour: TournamentInfo, renderer: ReplayRenderer, por
             "players": tour.players,
             "round": game.round,
             "sim": game.sim,
-            "round_winner": tour.round_winners.get(game.round),
+            "round_winner": game.winner if game.winner is not None else tour.round_winners.get(game.round),
+            "rounds": tour.rounds,
+            "sims": tour.sims_per_round,
+            "games": len(tour.games),
+            "folder": tour.folder.name,
+            "matchup": game.group or None,
         }
         return base.build_page(renderer.parse(base.read_sim(game), tour.players), payload, renderer)
 
@@ -57,18 +61,15 @@ def run_server(folder: Path, tour: TournamentInfo, renderer: ReplayRenderer, por
             if parsed.path == "/game":
                 q = urllib.parse.parse_qs(parsed.query)
                 try:
-                    r, s = int(q["r"][0]), int(q["s"][0])
+                    idx = int(q["g"][0])
+                    game = tour.games[idx]
                 except (KeyError, ValueError, IndexError):
-                    self.send_error(400, "need integer r and s")
-                    return
-                game = games.get((r, s))
-                if game is None:
-                    self.send_error(404, f"no game at round {r}, sim {s}")
+                    self.send_error(404, "no such game")
                     return
                 try:
                     self._html(render_game(game))
                 except Exception as exc:  # one bad game shouldn't take down the server
-                    print(f"[replay] failed to render round {r} sim {s}: {type(exc).__name__}: {exc}")
+                    print(f"[replay] failed to render game {idx}: {type(exc).__name__}: {exc}")
                     self._html(error_page(game, exc), status=500)
                 return
             self.send_error(404)

@@ -64,6 +64,8 @@ class GameRef:
     archive: Path | None = None
     member: str | None = None
     path: Path | None = None
+    group: str = ""  # matchup label, e.g. for a ladder made of many PvP sub-tournaments
+    winner: str | None = None  # this game's round winner (from its tournament's metadata)
 
 
 @dataclass
@@ -98,8 +100,10 @@ class ReplayRenderer(ABC):
 
 
 def _sim_index(name: str) -> int:
-    m = re.search(r"sim_?(\d+)", name)
-    return int(m.group(1)) if m else 0
+    """Best-effort sim index from a filename: the last integer in its stem (``sim_18`` -> 18,
+    ``round_1`` -> 1), else 0. ``discover_games`` de-duplicates any collisions within a round."""
+    nums = re.findall(r"\d+", name.rsplit(".", 1)[0])
+    return int(nums[-1]) if nums else 0
 
 
 def _round_num(name: str) -> int:
@@ -126,7 +130,8 @@ def discover_games(folder: Path, sim_glob: str) -> list[GameRef]:
                 archived.add(rnum)
                 with tarfile.open(entry) as tf:
                     for m in tf.getmembers():
-                        if m.isfile() and m.size > 0 and fnmatch.fnmatch(Path(m.name).name, sim_glob):
+                        base = Path(m.name).name
+                        if m.isfile() and m.size > 0 and not base.startswith("._") and fnmatch.fnmatch(base, sim_glob):
                             games.append(
                                 GameRef(round=rnum, sim=_sim_index(Path(m.name).name), archive=entry, member=m.name)
                             )
@@ -136,12 +141,30 @@ def discover_games(folder: Path, sim_glob: str) -> list[GameRef]:
             if entry.is_dir() and _round_num(entry.name) not in archived:
                 rnum = _round_num(entry.name)
                 for f in sorted(entry.iterdir()):
-                    if f.is_file() and f.stat().st_size > 0 and fnmatch.fnmatch(f.name, sim_glob):
+                    if (
+                        f.is_file()
+                        and f.stat().st_size > 0
+                        and not f.name.startswith("._")
+                        and fnmatch.fnmatch(f.name, sim_glob)
+                    ):
                         games.append(GameRef(round=rnum, sim=_sim_index(f.name), path=f))
     else:
         for f in sorted(folder.iterdir()):
             if f.is_file() and f.stat().st_size > 0 and fnmatch.fnmatch(f.name, sim_glob):
                 games.append(GameRef(round=0, sim=_sim_index(f.name), path=f))
+    # Ensure sim indices are unique within each round; if a filename scheme collides
+    # (or lacks numbers), fall back to enumeration order.
+    per_round: dict[int, list[GameRef]] = {}
+    for g in games:
+        per_round.setdefault(g.round, []).append(g)
+    for gs in per_round.values():
+        sims = [g.sim for g in gs]
+        # Enumerate on collisions, or when the parsed numbers are clearly seeds/timestamps
+        # (e.g. Halite's .hlt names) rather than small sim indices.
+        if len(set(sims)) != len(sims) or (sims and max(sims) > 4 * len(gs) + 100):
+            gs.sort(key=lambda g: g.member or (g.path.name if g.path else ""))
+            for i, g in enumerate(gs):
+                g.sim = i
     games.sort(key=lambda g: (g.round, g.sim))
     return games
 
@@ -162,26 +185,33 @@ def read_sim(game: GameRef) -> bytes:
 # --------------------------------------------------------------------------------------
 
 SHELL_CSS = """
-body{background:#0d1117;color:#e6edf3;font:14px system-ui,sans-serif;margin:0;padding:16px;display:flex;gap:20px;flex-wrap:wrap}
-canvas{background:#161b22;border-radius:8px}
+:root{--bg:#0d1117;--fg:#e6edf3;--muted:#8b949e;--dim:#6e7681;--line:#30363d;--panel:#161b22;--btn:#21262d;--btnb:#30363d;--accent:#58a6ff}
+:root[data-theme="light"]{--bg:#ffffff;--fg:#1f2328;--muted:#57606a;--dim:#8c959f;--line:#d0d7de;--panel:#f6f8fa;--btn:#f6f8fa;--btnb:#d0d7de;--accent:#0969da}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:14px system-ui,sans-serif;margin:0;padding:16px;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px}
+#stage{display:flex;gap:20px;flex-wrap:wrap;align-items:center;justify-content:center}
+canvas{background:var(--panel);border-radius:8px}
 #panel{min-width:260px}
 .row{margin:8px 0}
-button{background:#21262d;color:#e6edf3;border:1px solid #30363d;border-radius:6px;padding:6px 10px;cursor:pointer;font-size:14px}
-button:hover{background:#30363d}
+button{background:var(--btn);color:var(--fg);border:1px solid var(--btnb);border-radius:6px;padding:6px 10px;cursor:pointer;font-size:14px}
+button:hover{filter:brightness(1.15)}
 #tour{margin-bottom:12px}
 .tour-players{font-weight:700;font-size:15px}
 .tour-players .pl{white-space:nowrap}
-.tour-meta{font-size:12px;margin-top:2px}
-.muted{color:#8b949e}
+.tour-meta{font-size:12px;margin-top:2px;line-height:1.6}
+.tour-meta .k{color:var(--dim)}
+.muted{color:var(--muted)}
+#back{color:var(--muted);text-decoration:none;font-size:13px;padding:4px 10px;border-radius:6px;transition:color .15s,background .15s}
+#back:hover{color:var(--fg);background:var(--panel)}
 #winner{font-weight:700;font-size:16px;margin-top:12px}
 /* BattleSnake side panel */
 .sn{display:flex;align-items:center;gap:8px;margin:6px 0}
 .sw{width:14px;height:14px;border-radius:3px}
-.hb{height:8px;background:#30363d;border-radius:4px;flex:1;overflow:hidden}
+.hb{height:8px;background:var(--line);border-radius:4px;flex:1;overflow:hidden}
 .hf{height:100%}
 .dead{opacity:.4;text-decoration:line-through}
 /* RobotRumble side panel */
-.team{margin:12px 0;padding:10px;background:#161b22;border-radius:8px}
+.team{margin:12px 0;padding:10px;background:var(--panel);border-radius:8px}
 .tname{display:flex;align-items:center;gap:8px;font-weight:700}
 .stat{display:flex;justify-content:space-between;margin:6px 0;font-variant-numeric:tabular-nums}
 .team .hb{margin-top:4px}
@@ -189,6 +219,7 @@ button:hover{background:#30363d}
 """
 
 SHELL_BODY = """
+<div id="stage">
 <canvas id="c"></canvas>
 <div id="panel">
  <div id="tour"></div>
@@ -202,6 +233,8 @@ SHELL_BODY = """
  <div id="side"></div>
  <div id="winner"></div>
 </div>
+</div>
+<a id="back" href="/">&#8592; back to index</a>
 """
 
 # The player state machine. Expects globals ``G`` (ReplayData payload), optional ``TOUR``
@@ -209,6 +242,8 @@ SHELL_BODY = """
 # setup(cv, G, ctx) / draw(ctx, cv, G, i) / side(G, i).
 PLAYER_JS = """
 (function(){
+  // Inherit the light/dark choice made on the index (shared via localStorage).
+  document.documentElement.setAttribute('data-theme', localStorage.getItem('cc-replay-theme') || 'dark');
   const G = window.G, TOUR = window.TOUR || null, F = G.frames;
   const cv = document.getElementById('c'), ctx = cv.getContext('2d');
   if(!CanvasRenderingContext2D.prototype.roundRect){CanvasRenderingContext2D.prototype.roundRect=function(x,y,w,h,r){this.beginPath();this.moveTo(x+r,y);this.arcTo(x+w,y,x+w,y+h,r);this.arcTo(x+w,y+h,x,y+h,r);this.arcTo(x,y+h,x,y,r);this.arcTo(x,y,x+w,y,r);this.closePath();return this;};}
@@ -245,13 +280,19 @@ PLAYER_JS = """
     else if(e.key === ' '){ e.preventDefault(); play(); }
   });
   function renderTour(t){
-    const players = (t.players || []).map(p => `<span class="pl">${p.name}${p.model ? ` <span class="muted">(${p.model})</span>` : ''}</span>`).join(' vs ');
-    const bits = [];
-    if(t.arena) bits.push(`<b>${t.arena}</b>`);
-    if(t.round != null) bits.push(`round ${t.round}`);
-    if(t.sim != null) bits.push(`sim ${t.sim}`);
-    if(t.round_winner) bits.push(`round winner: ${t.round_winner}`);
-    return `<div class="tour-players">${players}</div><div class="muted tour-meta">${bits.join(' \\u00b7 ')}</div>`;
+    const players = (t.players || []).map(p => `<span class="pl">${p.name}${p.model ? ` <span class="muted">(${p.model})</span>` : ''}</span>`).join(', ');
+    const title = t.matchup ? t.matchup : players;
+    const line = (k, v) => `<span class="k">${k}</span> ${v}`;
+    const rows = [];
+    if(t.arena) rows.push(line('arena', `<b>${t.arena}</b>`));
+    if(t.matchup && players) rows.push(line('players', players));
+    const rd = (t.round != null ? `${t.round}${t.rounds != null ? '/'+t.rounds : ''}` : null);
+    if(rd != null) rows.push(line('round', rd) + (t.sim != null ? `  \\u00b7  <span class="k">sim</span> ${t.sim}` : ''));
+    if(t.sims != null) rows.push(line('sims/round', t.sims));
+    if(t.round_winner) rows.push(line('round winner', `<b>${t.round_winner}</b>`));
+    if(t.games != null) rows.push(line('games', t.games));
+    if(t.folder) rows.push(`<span class="k">${t.folder}</span>`);
+    return `<div class="tour-players">${title}</div><div class="muted tour-meta">${rows.join('<br>')}</div>`;
   }
   draw();
 })();
@@ -299,31 +340,89 @@ def build_page(data: ReplayData, tour: dict, renderer: ReplayRenderer) -> str:
 
 
 def build_index(tour: TournamentInfo) -> str:
-    """Index page: every game (round x sim) with its winner, linking to its replay."""
-    players = " vs ".join(p["name"] for p in tour.players)
+    """Index page: every game with its winner, linking to its replay by game index.
+
+    For a ladder (games carry a ``group`` matchup label) a Matchup column is shown.
+    """
+    players = ", ".join(p["name"] for p in tour.players) if tour.players else ""
+    laddered = any(g.group for g in tour.games)
+    rounds = len({g.round for g in tour.games})
+
     rows = []
-    for g in tour.games:
-        winner = tour.round_winners.get(g.round, "")
-        cell = f'<a class="btn" href="game?r={g.round}&s={g.sim}">&#9654; watch</a>'
-        rows.append(f"<tr><td>{g.round}</td><td>{g.sim}</td><td>{winner}</td><td>{cell}</td></tr>")
+    for idx, g in enumerate(tour.games):
+        winner = g.winner if g.winner is not None else tour.round_winners.get(g.round, "")
+        cell = f'<a class="watch" href="game?g={idx}"><span class="tri">&#9654;</span> watch</a>'
+        group_td = f"<td>{g.group}</td>" if laddered else ""
+        rows.append(f"<tr>{group_td}<td>{g.round}</td><td>{g.sim}</td><td>{winner or ''}</td><td>{cell}</td></tr>")
+
     style = (
-        "body{background:#0d1117;color:#e6edf3;font:14px system-ui,sans-serif;margin:0;padding:24px}"
-        "h1{font-size:18px}.muted{color:#8b949e}"
-        "table{border-collapse:collapse;margin-top:12px}"
-        "td,th{padding:6px 14px;border-bottom:1px solid #21262d;text-align:left}"
-        "a{color:#58a6ff}"
-        ".btn{display:inline-block;padding:3px 10px;border:1px solid #30363d;border-radius:6px;"
-        "background:#21262d;color:#e6edf3;text-decoration:none}.btn:hover{background:#30363d}"
+        ":root{--bg:#0d1117;--fg:#e6edf3;--muted:#8b949e;--dim:#6e7681;--line:#21262d;"
+        "--btn:#21262d;--btnb:#30363d;--accent:#58a6ff}"
+        ':root[data-theme="light"]{--bg:#ffffff;--fg:#1f2328;--muted:#57606a;--dim:#8c959f;'
+        "--line:#d0d7de;--btn:#f6f8fa;--btnb:#d0d7de;--accent:#0969da}"
+        "*{box-sizing:border-box}"
+        "body{background:var(--bg);color:var(--fg);font:14px system-ui,sans-serif;margin:0;"
+        "min-height:100vh;display:flex;flex-direction:column}"
+        ".bar{border-bottom:1px solid var(--line)}"
+        ".bar-inner{max-width:1000px;margin:0 auto;width:100%;display:flex;align-items:center;"
+        "justify-content:space-between;padding:0 24px;height:54px}"
+        ".brand{font-weight:700;font-size:16px}"
+        "main{flex:1;display:flex;align-items:center;justify-content:center;padding:24px}"
+        ".wrap{display:flex;gap:32px;align-items:flex-start;max-width:1000px}"
+        ".info{max-width:220px}"
+        ".info-title{font-size:16px;font-weight:700;margin-bottom:8px}"
+        ".folder{color:var(--dim);font-size:12px;margin-bottom:12px;word-break:break-all}"
+        ".meta{color:var(--muted);font-size:13px;line-height:2}"
+        ".meta .k{color:var(--dim);display:inline-block;min-width:92px}"
+        ".games{overflow-y:auto}table{border-collapse:collapse}"
+        "td,th{padding:5px 14px;border-bottom:1px solid var(--line);text-align:left}"
+        "th{color:var(--muted);font-weight:600;position:sticky;top:0;background:var(--bg)}"
+        "a{color:var(--accent)}"
+        ".btn{background:var(--btn);color:var(--fg);border:1px solid var(--btnb);border-radius:6px;"
+        "padding:5px 11px;cursor:pointer;font-size:15px;line-height:1;text-decoration:none}"
+        ".btn:hover{filter:brightness(1.15)}"
+        ".watch{color:var(--accent);text-decoration:none;font-weight:600;display:inline-flex;align-items:center;gap:6px}"
+        ".watch .tri{display:inline-block;font-size:11px;transition:transform .18s ease}"
+        ".watch:hover .tri{transform:translateX(4px)}.watch:hover{opacity:.82}"
     )
-    header = (
-        f"<h1>{tour.arena} &middot; {players}</h1>"
-        f'<div class="muted">{tour.rounds} round(s) &times; {tour.sims_per_round} sims &middot; {len(tour.games)} games'
-        f" &middot; {tour.folder.name}</div>"
+    kind = "LadderTournament" if laddered else "PvpTournament"
+    # Left column: title, folder, then each fact on its own line.
+    meta = [f'<div><span class="k">arena</span> {tour.arena}</div>']
+    if laddered:
+        meta.append(f'<div><span class="k">matchups</span> {len({g.group for g in tour.games})}</div>')
+    elif players:
+        meta.append(f'<div><span class="k">players</span> {players}</div>')
+    meta.append(f'<div><span class="k">rounds</span> {tour.rounds if tour.rounds is not None else rounds}</div>')
+    if tour.sims_per_round is not None:
+        meta.append(f'<div><span class="k">sims/round</span> {tour.sims_per_round}</div>')
+    meta.append(f'<div><span class="k">games</span> {len(tour.games)}</div>')
+    info = (
+        f"<div class='info'><div class='info-title'>{kind} &middot; {tour.arena}</div>"
+        f"<div class='folder'>{tour.folder.name}</div>"
+        f"<div class='meta'>{''.join(meta)}</div></div>"
+    )
+    matchup_th = "<th>matchup</th>" if laddered else ""
+    table = (
+        f"<div class='games'><table><tr>{matchup_th}<th>round</th><th>sim</th><th>winner</th><th></th></tr>"
+        + "".join(rows)
+        + "</table></div>"
+    )
+    # Theme toggle (persisted in localStorage) + cap the games table to the info column's height.
+    js = (
+        "const KEY='cc-replay-theme',root=document.documentElement,btn=document.getElementById('theme');"
+        "function apply(t){root.setAttribute('data-theme',t);btn.textContent=(t==='light')?'\\u2600':'\\u263e';}"
+        "apply(localStorage.getItem(KEY)||'dark');"
+        "btn.onclick=function(){var t=(root.getAttribute('data-theme')==='light')?'dark':'light';"
+        "localStorage.setItem(KEY,t);apply(t);};"
+        "var iw=document.querySelector('.info'),ig=document.querySelector('.games');"
+        "if(iw&&ig)ig.style.maxHeight=iw.offsetHeight+'px';"
     )
     return (
-        f'<!doctype html><html><head><meta charset="utf-8"><title>{tour.arena} replays</title>'
-        f"<style>{style}</style></head><body>{header}"
-        "<table><tr><th>round</th><th>sim</th><th>round winner</th><th></th></tr>"
-        + "".join(rows)
-        + "</table></body></html>\n"
+        '<!doctype html><html data-theme="dark"><head><meta charset="utf-8">'
+        f"<title>{tour.arena} replays</title><style>{style}</style></head><body>"
+        "<header class='bar'><div class='bar-inner'>"
+        "<div class='brand'>CodeClash Tournament Replayer</div>"
+        "<button id='theme' class='btn' title='Toggle light / dark'></button></div></header>"
+        f"<main><div class='wrap'>{info}{table}</div></main>"
+        "<script>" + js + "</script></body></html>\n"
     )
