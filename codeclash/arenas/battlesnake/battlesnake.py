@@ -127,8 +127,13 @@ Snakes collect food, avoid collisions, and try to outlast their opponents."""
         try:
             self.logger.info(f"Running game with players: {list(player2port.keys())}")
 
-            # Use ThreadPoolExecutor for parallel execution
-            with ThreadPoolExecutor(20) as executor:
+            # Use ThreadPoolExecutor for parallel execution. Concurrency is configurable
+            # (game.sim_concurrency): the single-threaded bot servers serialize move
+            # requests, so total concurrency across all parallel pairs must stay bounded or
+            # responses exceed the move timeout and games degenerate. When running many pairs
+            # concurrently (ladder --workers), lower this so workers*sim_concurrency stays ~20.
+            max_sim_workers = self.game_config.get("sim_concurrency", 20)
+            with ThreadPoolExecutor(max_sim_workers) as executor:
                 # Submit all simulations to the thread pool
                 futures = [
                     executor.submit(self._run_single_simulation, player2port, idx)

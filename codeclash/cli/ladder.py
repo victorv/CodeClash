@@ -1,7 +1,9 @@
 """`codeclash ladder` subcommands: build a ladder (make) and climb it (run)."""
 
+import copy
 import getpass
 import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 import typer
@@ -10,7 +12,10 @@ import yaml
 from codeclash import CONFIG_DIR
 from codeclash.constants import LOCAL_LOG_DIR
 from codeclash.tournaments.pvp import PvpTournament
+from codeclash.utils.log import get_logger
 from codeclash.utils.yaml_utils import resolve_includes
+
+logger = get_logger("ladder")
 
 ladder_app = typer.Typer(
     no_args_is_help=True, add_completion=False, context_settings={"help_option_names": ["-h", "--help"]}
@@ -20,6 +25,9 @@ ladder_app = typer.Typer(
 @ladder_app.command("make")
 def make(
     config_path: Path = typer.Argument(..., help="Path to the ladder (round-robin) config file."),
+    workers: int = typer.Option(
+        1, "--workers", "-w", help="Pairwise tournaments to run concurrently (each pair is independent)."
+    ),
 ):
     """Build a ladder: run PvP tournaments across all pairs of players (for ranking)."""
     yaml_content = config_path.read_text()
@@ -28,24 +36,40 @@ def make(
 
     players = config["players"]
     num_players = len(players)
+
+    # Build one fully independent (deep-copied) config per pair up front so concurrent runs
+    # never share or mutate the same player/config dicts.
+    jobs: list[tuple[dict, Path]] = []
     for i in range(num_players):
         for j in range(i + 1, num_players):
-            player1 = players[i]
+            player1 = copy.deepcopy(players[i])
             player1["name"] = player1["branch_init"]
-            player2 = players[j]
+            player2 = copy.deepcopy(players[j])
             player2["name"] = player2["branch_init"]
-            pvp_config = {
-                **config,
-                "players": [player1, player2],
-            }
-
+            pvp_config = {**copy.deepcopy(config), "players": [player1, player2]}
             vs = f"PvpTournament.{player1['name']}_vs_{player2['name']}".replace("/", "_")
             output_dir = LOCAL_LOG_DIR / "ladder" / config["game"]["name"] / vs
-            try:
-                tournament = PvpTournament(pvp_config, output_dir=output_dir)
-            except FileExistsError:
-                continue
+            jobs.append((pvp_config, output_dir))
+
+    def run_pair(pvp_config: dict, output_dir: Path) -> None:
+        try:
+            tournament = PvpTournament(pvp_config, output_dir=output_dir)
+        except FileExistsError:
+            return  # already completed by a previous invocation
+        # A single failing pair must not abort the rest of a long round-robin.
+        try:
             tournament.run()
+        except Exception:
+            logger.exception(f"Pair failed, skipping: {output_dir.name}")
+
+    if workers <= 1:
+        for pvp_config, output_dir in jobs:
+            run_pair(pvp_config, output_dir)
+    else:
+        with ThreadPoolExecutor(max_workers=workers) as executor:
+            futures = [executor.submit(run_pair, c, d) for c, d in jobs]
+            for f in as_completed(futures):
+                f.result()
 
 
 @ladder_app.command("run")
