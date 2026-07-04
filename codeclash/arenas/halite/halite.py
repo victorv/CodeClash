@@ -20,7 +20,10 @@ MAP_FILE_TYPE_TO_COMPILE = {
     ".cpp": "g++ -std=c++11 {name}.cpp -o {name}.o",
     ".c": "gcc {name}.c -o {name}.o",
     ".hs": "ghc --make {name}.hs -O -v0 -rtsopts -outputdir dist",
-    ".ml": "ocamlbuild -lib unix {name}.native",
+    # ocamlbuild normally leaves {name}.native as an ABSOLUTE symlink into _build/, which
+    # dangles once the built submission is relocated to /<player>/submission for the match
+    # (the bot then fails to launch). -no-links + copy emits a real, relocatable binary.
+    ".ml": "ocamlbuild -no-links -lib unix {name}.native && cp _build/{name}.native {name}.native",
     ".rs": "cargo build",
 }
 

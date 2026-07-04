@@ -18,7 +18,10 @@ from codeclash.utils.yaml_utils import resolve_includes
 logger = get_logger("ladder")
 
 ladder_app = typer.Typer(
-    no_args_is_help=True, add_completion=False, context_settings={"help_option_names": ["-h", "--help"]}
+    no_args_is_help=True,
+    add_completion=False,
+    rich_markup_mode="rich",  # enables the [dim] markup used in the Examples blocks
+    context_settings={"help_option_names": ["-h", "--help"]},
 )
 
 
@@ -29,7 +32,10 @@ def make(
         1, "--workers", "-w", help="Pairwise tournaments to run concurrently (each pair is independent)."
     ),
 ):
-    """Build a ladder: run PvP tournaments across all pairs of players (for ranking)."""
+    """Build a ladder: run PvP tournaments across all pairs of players (for ranking).
+
+    [dim]• codeclash ladder make configs/ablations/ladder/make_battlesnake.yaml[/dim]
+    """
     yaml_content = config_path.read_text()
     preprocessed_yaml = resolve_includes(yaml_content, base_dir=CONFIG_DIR)
     config = yaml.safe_load(preprocessed_yaml)
@@ -82,7 +88,10 @@ def run(
         False, "--keep-containers", "-k", help="Do not remove containers after games/agent finish."
     ),
 ):
-    """Send a model up a ranked ladder, rung by rung, until it loses."""
+    """Send a model up a ranked ladder, rung by rung, until it loses.
+
+    [dim]• codeclash ladder run path/to/ladder_config.yaml -c  # clean up after each rung[/dim]
+    """
     yaml_content = config_path.read_text()
     preprocessed_yaml = resolve_includes(yaml_content, base_dir=CONFIG_DIR)
     config = yaml.safe_load(preprocessed_yaml)

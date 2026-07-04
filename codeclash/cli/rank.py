@@ -11,7 +11,10 @@ from codeclash.analysis.metrics import win_rate as win_rate_mod
 from codeclash.constants import LOCAL_LOG_DIR
 
 rank_app = typer.Typer(
-    no_args_is_help=True, add_completion=False, context_settings={"help_option_names": ["-h", "--help"]}
+    no_args_is_help=True,
+    add_completion=False,
+    rich_markup_mode="rich",  # enables the [dim] markup used in the Examples blocks
+    context_settings={"help_option_names": ["-h", "--help"]},
 )
 
 
@@ -19,7 +22,10 @@ rank_app = typer.Typer(
 def win_rate(
     logs: Path = typer.Argument(LOCAL_LOG_DIR, help="Path to game logs (default: logs/)."),
 ):
-    """Print per-game and game-agnostic win rates for each model."""
+    """Print per-game and game-agnostic win rates for each model.
+
+    [dim]• codeclash rank win-rate logs/[/dim]
+    """
     win_rate_mod.main(logs)
 
 
@@ -29,7 +35,10 @@ def matrix(
     repetitions: int = typer.Option(3, "--repetitions", "-n", help="Repetitions per matchup."),
     max_workers: int = typer.Option(4, "--max-workers", "-w", help="Number of parallel game workers."),
 ):
-    """Evaluate PvP tournament matrices (head-to-head win matrix)."""
+    """Evaluate PvP tournament matrices (head-to-head win matrix).
+
+    [dim]• codeclash rank matrix logs/PvpTournament.<...> -n 5 -w 8[/dim]
+    """
     matrix_mod.main(pvp_output_dir, n_repetitions=repetitions, max_workers=max_workers)
 
 
@@ -37,8 +46,9 @@ def matrix(
     "elo",
     context_settings={"allow_extra_args": True, "ignore_unknown_options": True},
     help=(
-        "Fit a Bradley-Terry/Elo model and generate plots. Forwards all arguments to the elo "
-        "analysis module, e.g.:  codeclash rank elo -d logs/ --print-matrix --output-dir assets/elo_plots"
+        "Fit a Bradley-Terry/Elo model and generate plots. Forwards all extra arguments to the "
+        "elo analysis module.\n\n"
+        "[dim]• codeclash rank elo -d logs/ --print-matrix --output-dir assets/elo_plots[/dim]"
     ),
 )
 def elo(ctx: typer.Context):
