@@ -47,6 +47,7 @@ dev = [
     "ruff",
     "Werkzeug",
     "frozen-flask",
+    "anthropic",
 ]
 aws = [
     "boto3",

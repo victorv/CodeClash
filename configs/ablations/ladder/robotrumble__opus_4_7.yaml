@@ -1,3 +1,5 @@
+# RobotRumble ladder climbed by opus-4-7. Requires LLAMA_API_KEY in .env.
+#   uv run codeclash ladder run configs/ablations/ladder/robotrumble__opus_4_7.yaml
 tournament:
   rounds: 5
 ladder_rules:
@@ -10,15 +12,11 @@ game:
     raw: false
 player:
   agent: mini
-  name: claude-sonnet-4-5-20250929
+  name: opus-4-7
   branch_init: human/anton/anton3000
   config:
     agent: !include mini/default.yaml
-    model:
-      model_name: anthropic/claude-sonnet-4-5-20250929
-      model_kwargs:
-        temperature: 0.2
-        max_tokens: 4096
+    model: !include mini/models/llama_opus_4_7.yaml
   push: True
 prompts:
   game_description: |-
