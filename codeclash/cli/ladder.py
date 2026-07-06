@@ -21,10 +21,12 @@ logger = get_logger("ladder")
 def _resolve_ladder_rules(ladder_rules: dict, rounds: int) -> tuple[float, int]:
     """Validate the optional ``ladder_rules`` block and return ``(min_round_win_fraction, win_last_k)``.
 
-    Defaults reproduce the historical behavior: win a strict majority of rounds
-    (``min_round_win_fraction=0.5``) AND win the final round (``win_last_k=1``).
+    Defaults: win at least ``min_round_win_fraction`` (0.4) of the *agent* rounds AND win the last
+    ``win_last_k`` (1) round(s). The baseline round 0 (identical, un-edited codebases) is excluded
+    from this count — it reflects game variance, not the agent — so the fraction is taken over the
+    ``rounds`` rounds the agent actually edits.
     """
-    min_round_win_fraction = ladder_rules.get("min_round_win_fraction", 0.5)
+    min_round_win_fraction = ladder_rules.get("min_round_win_fraction", 0.4)
     win_last_k = ladder_rules.get("win_last_k", 1)
 
     # win_last_k: number of trailing rounds the player must win (1 == just the final round).
@@ -40,14 +42,15 @@ def _resolve_ladder_rules(ladder_rules: dict, rounds: int) -> tuple[float, int]:
         typer.echo(f"ladder_rules.win_last_k ({win_last_k}) cannot exceed tournament.rounds ({rounds}).")
         raise typer.Exit(1)
 
-    # min_round_win_fraction: player must win strictly more than this fraction of rounds.
+    # min_round_win_fraction: player must win >= this fraction of the agent rounds (round 0 excluded).
     if isinstance(min_round_win_fraction, bool) or not isinstance(min_round_win_fraction, (int, float)):
         typer.echo(f"ladder_rules.min_round_win_fraction must be a number, got {min_round_win_fraction!r}.")
         raise typer.Exit(1)
-    if not 0 <= min_round_win_fraction < 1:
+    if not 0 <= min_round_win_fraction <= 1:
         typer.echo(
-            f"ladder_rules.min_round_win_fraction must be in [0, 1), got {min_round_win_fraction}. "
-            "0.5 requires a strict majority; 0 drops the majority requirement."
+            f"ladder_rules.min_round_win_fraction must be in [0, 1], got {min_round_win_fraction}. "
+            "The player must win >= this fraction of the agent rounds; 1 requires winning all of them, "
+            "0 drops the fraction requirement."
         )
         raise typer.Exit(1)
 
@@ -145,8 +148,8 @@ def run(
     config.pop("ladder_rules", None)
 
     print(
-        f"Ladder advancement rule: win > {min_round_win_fraction:.0%} of {rounds} rounds "
-        f"and win the last {win_last_k} round(s)."
+        f"Ladder advancement rule: win >= {min_round_win_fraction:.0%} of {rounds} agent rounds "
+        f"(baseline round 0 excluded) and win the last {win_last_k} round(s)."
     )
     ladder_folder = f"LadderTournament.{config['game']['name']}.r{rounds}.s{sims}.{timestamp}"
     player["branch"] = ladder_folder
@@ -185,12 +188,12 @@ def run(
         metadata_path = tournament_dir / "metadata.json"
         with open(metadata_path) as f:
             metadata = yaml.safe_load(f)
-        round_winners = [r["winner"] for r in metadata["round_stats"].values()]
+        round_winners = [r["winner"] for k, r in metadata["round_stats"].items() if int(k) != 0]
 
-        # Advancement rule (configurable via `ladder_rules`): win strictly more than
-        # `min_round_win_fraction` of rounds AND win the last `win_last_k` rounds.
+        # Advancement rule (configurable via `ladder_rules`): win at least
+        # `min_round_win_fraction` of the agent rounds AND win the last `win_last_k` rounds.
         player_wins = sum(1 for w in round_winners if w == player["name"])
-        won_majority = player_wins > len(round_winners) * min_round_win_fraction
+        won_majority = player_wins >= len(round_winners) * min_round_win_fraction
         won_last_k = all(w == player["name"] for w in round_winners[-win_last_k:])
 
         if not won_majority or not won_last_k:
@@ -198,8 +201,8 @@ def run(
             print("=" * 10)
             print(
                 f"{player['name']} did not clear {opponent['name']} "
-                f"(rank {opponent_rank}/{len(ladder)}): won {player_wins}/{len(round_winners)} rounds "
-                f"(needed > {min_round_win_fraction:.0%}), last {win_last_k} round(s) won: {won_last_k}.\n"
+                f"(rank {opponent_rank}/{len(ladder)}): won {player_wins}/{len(round_winners)} agent rounds "
+                f"(needed >= {min_round_win_fraction:.0%}), last {win_last_k} round(s) won: {won_last_k}.\n"
                 "Ladder challenge ends."
             )
             print("=" * 10)

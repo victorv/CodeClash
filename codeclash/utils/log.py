@@ -1,12 +1,13 @@
 from __future__ import annotations
 
 import logging
+import os
 from pathlib import Path
 
 from rich.console import Console
 from rich.text import Text
 
-_STREAM_LEVEL = logging.DEBUG
+_STREAM_LEVEL = getattr(logging, os.getenv("CODECLASH_LOG_LEVEL", "INFO").upper(), logging.INFO)
 _FILE_LEVEL = logging.DEBUG
 
 # logging.getLogger().setLevel(logging.DEBUG)

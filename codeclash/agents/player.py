@@ -196,8 +196,13 @@ class Player(ABC):
     def _commit(self) -> None:
         """Commit changes to the agent's codebase."""
         r = self.game_context.round
+        unstage_binaries = (
+            "git diff --cached --numstat | awk -F'\\t' '$1==\"-\" && $2==\"-\" {print $3}' "
+            "| xargs -r -d '\\n' git reset -q HEAD --"
+        )
         for cmd in [
             "git add -A",
+            unstage_binaries,
             f"git commit --allow-empty -m 'Round {r} Update'",
         ]:
             assert_zero_exit_code(self.environment.execute(cmd), logger=self.logger)
