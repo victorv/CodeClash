@@ -46,5 +46,5 @@ prompts:
     After you and your competitor finish editing your codebases, the game is run automatically.
 
     Your task: improve the bot in `submission`, located in {{working_dir}}.
-    {{working_dir}} is your codebase, which contains both your both and supporting assets.
+    {{working_dir}} is your codebase, which contains both your bot and supporting assets.
     All of your commands will be executed in the {{working_dir}} directory (see notes below).

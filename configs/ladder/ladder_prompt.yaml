@@ -8,5 +8,8 @@ game_description: |-
   when you submit, the two bots play a full match and the result is recorded. This is round {{round}} —
   review how earlier rounds went (past match logs are in `/logs/`) and make your bot stronger.
 
+  {{working_dir}} is your codebase, which contains both your bot and supporting assets, and all of your
+  commands will be executed in the {{working_dir}} directory (see notes below).
+
   Your goal is to beat the opponent. The game's rules and your bot's entry point are documented in the
   codebase (`docs/`).

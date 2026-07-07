@@ -1,0 +1,28 @@
+# Throwaway smoke to verify the LadderTournament refactor end-to-end without API cost:
+# an instant-submit climber ascends a 1-rung dummy ladder. 1 round, 10 sims.
+#   uv run codeclash ladder run configs/test/battlesnake_ladder_smoke.yaml -c
+tournament:
+  rounds: 1
+ladder_rules:
+  min_round_wins: 1
+  win_last_k: 0
+game:
+  name: BattleSnake
+  sims_per_round: 10
+  args:
+    width: 11
+    height: 11
+    browser: false
+player:
+  agent: mini
+  name: smoke-climber
+  branch_init: human/moxuz/pinky-snek
+  config:
+    agent:
+      <<: !include mini/default.yaml
+      step_limit: 3
+    model: !include mini/instant_submit.yaml
+  push: False
+prompts: !include ladder/ladder_prompt.yaml
+ladder:
+- {agent: dummy, name: pinky, branch_init: human/moxuz/pinky-snek}
