@@ -1592,6 +1592,19 @@ if __name__ == "__main__":
         default=ASSETS_DIR / "elo_plots",
         help="Directory to save plots (default: assets/elo_plots)",
     )
+    parser.add_argument(
+        "--bootstrap",
+        action="store_true",
+        help="Run the bootstrap rank-stability analysis (nonparametric + parametric). Off by "
+        "default: it refits the whole model per sample, so it is very slow (minutes per sample on "
+        "a large ladder). The ranking and per-fit ±1σ uncertainties are produced without it.",
+    )
+    parser.add_argument(
+        "--n-bootstrap",
+        type=int,
+        default=1000,
+        help="Bootstrap samples per type when --bootstrap is set (default: 1000).",
+    )
     args = parser.parse_args()
 
     builder = ScoreMatrixBuilder(
@@ -1637,12 +1650,12 @@ if __name__ == "__main__":
     write_website_results(results, args.output_dir)
     write_latex_table_plain(results, args.output_dir)
 
-    if uncertainties_supported:
+    if args.bootstrap and uncertainties_supported:
         bootstrap_results = {}
         for bootstrap_type in ["nonparametric", "parametric"]:
             bootstrap_results[bootstrap_type] = BootStrapRankStability(
                 builder,
-                n_bootstrap=1000,
+                n_bootstrap=args.n_bootstrap,
                 game="ALL",
                 regularization=args.regularization,
                 topks=None,
@@ -1650,6 +1663,8 @@ if __name__ == "__main__":
                 output_dir=args.output_dir,
             ).run()
         write_bootstrap_metrics_table(bootstrap_results, args.output_dir, game="ALL")
+    elif uncertainties_supported:
+        logger.info("Skipping bootstrap rank-stability analysis (pass --bootstrap to enable).")
 
     # Max-round analyses are multi-round-only; skip them for single-round ladder round-robins.
     if not args.include_round_0:
