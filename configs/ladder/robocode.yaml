@@ -1,0 +1,24 @@
+tournament:
+  rounds: 5
+ladder_rules: !include ladder/ladder_rules.yaml
+game:
+  name: RoboCode
+  sims_per_round: 250
+  args:
+    nodisplay: true
+    nosound: true
+  record_ratio: 0.2
+player:
+  agent: mini
+  name: claude-sonnet-4-5-20250929
+  branch_init: human/technischeinformatica/tearsofsteel
+  config:
+    agent: !include mini/default.yaml
+    model:
+      model_name: anthropic/claude-sonnet-4-5-20250929
+      model_kwargs:
+        temperature: 0.2
+        max_tokens: 4096
+  push: True
+prompts: !include ladder/ladder_prompt.yaml
+ladder: !include ladder/rungs/robocode.yaml
