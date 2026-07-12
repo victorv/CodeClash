@@ -1,4 +1,5 @@
 import json
+import re
 import shlex
 import subprocess
 from collections import Counter
@@ -12,6 +13,14 @@ DEFAULT_SIMS = 100
 MAP_EXT_TO_HEADER = {
     "js": ["function robot(state, unit) {"],
     "py": ["def robot(state, unit):", "def robot(state: State, unit: Obj)"],
+}
+# Recognizes a valid `robot(state, unit)` entry point regardless of type annotations, return
+# hints, or extra whitespace (e.g. `def robot(state, unit) -> Action:` or
+# `def robot(state: State, unit: Obj) -> Optional[Action]:`). The MAP_EXT_TO_HEADER strings
+# above stay as the human-readable examples shown in the validation error message.
+MAP_EXT_TO_SIGNATURE_RE = {
+    "js": re.compile(r"function\s+robot\s*\(\s*state\b[^)]*,\s*unit\b[^)]*\)"),
+    "py": re.compile(r"def\s+robot\s*\(\s*state\b[^)]*,\s*unit\b[^)]*\)"),
 }
 ROBOTRUMBLE_HIDDEN_EXEC = ".codeclash_exec"
 
@@ -155,10 +164,10 @@ NOTE: Please ensure that your code runs efficiently (under 60 seconds). Code tha
             return False, "There should be a `robot.js` or `robot.py` file"
         agent.environment.execute(f'echo "robot.{ext}" > {ROBOTRUMBLE_HIDDEN_EXEC}')
 
-        # Check that the robot function is defined
-        if not any(
-            [header in agent.environment.execute(f"cat robot.{ext}")["output"] for header in MAP_EXT_TO_HEADER[ext]]
-        ):
+        # Check that the robot function is defined. Match on a signature regex (tolerant of type
+        # annotations, return hints, and whitespace) rather than an exact substring, so a valid
+        # entry point like `def robot(state, unit) -> Action:` is not spuriously rejected.
+        if not MAP_EXT_TO_SIGNATURE_RE[ext].search(agent.environment.execute(f"cat robot.{ext}")["output"]):
             headers = "\n- ".join(MAP_EXT_TO_HEADER[ext])
             return (
                 False,

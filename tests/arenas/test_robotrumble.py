@@ -86,6 +86,28 @@ class TestRobotRumbleValidation:
         assert is_valid is True
         assert error is None
 
+    def test_valid_py_submission_annotated(self, arena, mock_player_factory):
+        """A robot() with type annotations / a return hint must still validate.
+
+        Regression: the old exact-substring check rejected `def robot(state, unit) -> Action:`
+        (matched neither whitelisted header), auto-failing otherwise-valid submissions.
+        """
+        annotated = '\ndef robot(state, unit) -> "Action":\n    return Action.move(Direction.East)\n'
+        player = mock_player_factory(
+            name="test_player",
+            files={"robot.py": annotated},
+            command_outputs={
+                "test -f robot.js && echo 'exists'": {"output": "", "returncode": 1},
+                "test -f robot.py && echo 'exists'": {"output": "exists", "returncode": 0},
+                "cat robot.py": {"output": annotated, "returncode": 0},
+                f'echo "robot.py" > {ROBOTRUMBLE_HIDDEN_EXEC}': {"output": "", "returncode": 0},
+                "./rumblebot run term --raw robot.py robot.py -t 1": {"output": "Blue won", "returncode": 0},
+            },
+        )
+        is_valid, error = arena.validate_code(player)
+        assert is_valid is True
+        assert error is None
+
     def test_missing_robot_file(self, arena, mock_player_factory):
         """Test that missing robot file fails validation."""
         player = mock_player_factory(
