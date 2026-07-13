@@ -195,6 +195,16 @@ class LadderTournament:
         self.config = config
         self.ladder = config["ladder"]
         self.player = config["player"]
+        # CC:Ladder semantics REQUIRE push: True. Cross-rung carry-over (each rung continues from the
+        # previous rung's codebase) is delivered by checking out the pushed branch; with push: False
+        # every rung silently restarts from the starter template (no carry-over) and --resume is
+        # impossible. Reject it loudly rather than produce a degenerate run.
+        if not self.player.get("push"):
+            raise ValueError(
+                "CC:Ladder requires the player's `push: True`. With `push: False`, per-rung carry-over "
+                "silently degrades to restarting every rung from the starter template (no hill-climb), "
+                "and --resume cannot work. Set `push: True` in the player config."
+            )
         self.rounds = config["tournament"]["rounds"]
         self.sims = config["game"]["sims_per_round"]
         self.min_round_wins, self.win_last_k = resolve_ladder_rules(config.get("ladder_rules", {}), self.rounds)
