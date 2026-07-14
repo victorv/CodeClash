@@ -1,116 +1,174 @@
 - agent: dummy
   branch_init: human/anton/anton3000
+  elo: -1736.7
 - agent: dummy
   branch_init: human/happysquid/test
+  elo: -1624.4
 - agent: dummy
   branch_init: human/anton/wallifier
+  elo: -911.3
 - agent: dummy
   branch_init: human/ldang/nessy
+  elo: -538.5
 - agent: dummy
   branch_init: human/ldang/nemo
+  elo: -496.7
 - agent: dummy
   branch_init: human/navster8/bash-brothers
+  elo: -496.0
 - agent: dummy
   branch_init: human/aaoutkine/dark-knight
+  elo: -55.6
 - agent: dummy
   branch_init: human/mountain/neuralbot1-1h
+  elo: 23.5
 - agent: dummy
   branch_init: human/sivecano/clouded-mind
+  elo: 75.9
 - agent: dummy
   branch_init: human/mountain/neuralbot2-6h
+  elo: 331.4
 - agent: dummy
   branch_init: human/kalkin/artemis
+  elo: 340.7
 - agent: dummy
   branch_init: human/kalkin/artemis2
+  elo: 390.0
 - agent: dummy
   branch_init: human/navster8/maginot-line
+  elo: 397.3
 - agent: dummy
   branch_init: human/jiricodes/jiricodes-bot
+  elo: 400.0
 - agent: dummy
   branch_init: human/sbasu3/meek-bot
+  elo: 499.4
 - agent: dummy
   branch_init: human/essickmango/fruity-test
+  elo: 935.9
 - agent: dummy
   branch_init: human/tabaxi3k/charles
+  elo: 936.3
 - agent: dummy
   branch_init: human/devchris/first_test
+  elo: 940.9
 - agent: dummy
   branch_init: human/aaa/jippty5
+  elo: 1032.3
 - agent: dummy
   branch_init: human/jay0jayjay/naivestarter
+  elo: 1168.3
 - agent: dummy
   branch_init: human/luisa/luisasrobot
+  elo: 1223.1
 - agent: dummy
   branch_init: human/luisa/baselinegere
+  elo: 1226.0
 - agent: dummy
   branch_init: human/anton/anton4000
+  elo: 1397.8
 - agent: dummy
   branch_init: human/aayyad/testbot
+  elo: 1427.0
 - agent: dummy
   branch_init: human/edward/flail
+  elo: 1477.2
 - agent: dummy
   branch_init: human/mousetail/genetic-robot
+  elo: 1493.7
 - agent: dummy
   branch_init: human/kalkin/maxad
+  elo: 1498.1
 - agent: dummy
   branch_init: human/mjburgess/rule99
+  elo: 1499.7
 - agent: dummy
   branch_init: human/ketza/bob
+  elo: 1543.2
 - agent: dummy
   branch_init: human/suddenlyseals/control-center
+  elo: 1551.4
 - agent: dummy
   branch_init: human/aaoutkine/school-bot
+  elo: 1570.6
 - agent: dummy
   branch_init: human/thesmilingturtl/naivefaa
+  elo: 1587.8
 - agent: dummy
   branch_init: human/mario31313/alpha_13
+  elo: 1588.9
 - agent: dummy
   branch_init: human/underscore/bot1
+  elo: 1589.8
 - agent: dummy
   branch_init: human/lanity/sivuy
+  elo: 1593.7
 - agent: dummy
   branch_init: human/mee42/follow-bot
+  elo: 1594.1
 - agent: dummy
   branch_init: human/anton/om-om
+  elo: 1594.2
 - agent: dummy
   branch_init: human/aaoutkine/silo34
+  elo: 1618.6
 - agent: dummy
   branch_init: human/mountain/neuralbot4-3h
+  elo: 1622.5
 - agent: dummy
   branch_init: human/ketza/arthur
+  elo: 1624.4
 - agent: dummy
   branch_init: human/mkap/test
+  elo: 1638.9
 - agent: dummy
   branch_init: human/essickmango/pickle-up
+  elo: 1655.9
 - agent: dummy
   branch_init: human/wolfsleuth/simple
+  elo: 1656.1
 - agent: dummy
   branch_init: human/gerenuk/gere-ape
+  elo: 1712.4
 - agent: dummy
   branch_init: human/clay/diag-lattice
+  elo: 1719.0
 - agent: dummy
   branch_init: human/atl15/centerrr
+  elo: 1838.2
 - agent: dummy
   branch_init: human/jammyliu/sixty-nine-line
+  elo: 1889.7
 - agent: dummy
   branch_init: human/mitch84/walk_retreat
+  elo: 1968.8
 - agent: dummy
   branch_init: human/tabaxi3k/black-magic-1
+  elo: 1994.3
 - agent: dummy
   branch_init: human/devchris/black_magic
+  elo: 2001.7
 - agent: dummy
   branch_init: human/mitch84/retreat_walk2
+  elo: 2040.6
 - agent: dummy
   branch_init: human/mitch84/crw_preempt
+  elo: 2109.9
 - agent: dummy
   branch_init: human/entropicdrifter/glommer
+  elo: 2250.2
 - agent: dummy
   branch_init: human/mousetail/coward-bot
+  elo: 2326.5
 - agent: dummy
   branch_init: human/entropicdrifter/glommerv2
+  elo: 2456.8
 - agent: dummy
   branch_init: human/entropicdrifter/we-are-borg
+  elo: 2560.0
 - agent: dummy
   branch_init: human/entropicdrifter/seven-of-nine
+  elo: 2627.3
 - agent: dummy
   branch_init: human/entropicdrifter/gigachad
+  elo: 3219.0

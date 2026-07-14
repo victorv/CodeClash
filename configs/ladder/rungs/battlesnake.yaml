@@ -1,100 +1,150 @@
 - agent: dummy
   branch_init: human/pambrose/pambrose-kotlin
+  elo: 379.2
 - agent: dummy
   branch_init: human/Nettogrof/nessegrev-julia
+  elo: 556.2
 - agent: dummy
   branch_init: human/Nettogrof/nessegrev-java
+  elo: 647.3
 - agent: dummy
   branch_init: human/csauve/bookworm
+  elo: 693.8
 - agent: dummy
   branch_init: human/coreyja/improbable-irene
+  elo: 702.2
 - agent: dummy
   branch_init: human/graeme-hill/snakebot
+  elo: 712.5
 - agent: dummy
   branch_init: human/coreyja/devious-devin
+  elo: 730.4
 - agent: dummy
   branch_init: human/m-schier/kreuzotter
+  elo: 831.8
 - agent: dummy
   branch_init: human/nbw/nbw-crystal
+  elo: 875.4
 - agent: dummy
   branch_init: human/Xe/since
+  elo: 892.1
 - agent: dummy
   branch_init: human/ccSnake2018/ccsnake
+  elo: 920.8
 - agent: dummy
   branch_init: human/coreyja/bombastic-bob
+  elo: 965.2
 - agent: dummy
   branch_init: human/coreyja/coreyja-rs
+  elo: 969.3
 - agent: dummy
   branch_init: human/coreyja/jump-flooding
+  elo: 1001.0
 - agent: dummy
   branch_init: human/zacpez/scape-goat
+  elo: 1001.1
 - agent: dummy
   branch_init: human/tim-hub/awesome-snake
+  elo: 1037.1
 - agent: dummy
   branch_init: human/rdbrck/btas
+  elo: 1045.0
 - agent: dummy
   branch_init: human/Spenca/vulture-snake
+  elo: 1051.6
 - agent: dummy
   branch_init: human/moxuz/pinky-snek
+  elo: 1100.5
 - agent: dummy
   branch_init: human/coreyja/amphibious-arthur
+  elo: 1182.4
 - agent: dummy
   branch_init: human/OliverMKing/astar-snake
+  elo: 1185.7
 - agent: dummy
   branch_init: human/nbw/nbw-ruby
+  elo: 1193.8
 - agent: dummy
   branch_init: human/coreyja/eremetic-eric
+  elo: 1252.0
 - agent: dummy
   branch_init: human/coreyja/gigantic-george
+  elo: 1259.6
 - agent: dummy
   branch_init: human/Flipez/flipez-crystal
+  elo: 1260.7
 - agent: dummy
   branch_init: human/jackisherwood/battlesnake-elon
+  elo: 1276.4
 - agent: dummy
   branch_init: human/MorganConrad/tantilla
+  elo: 1305.7
 - agent: dummy
   branch_init: human/ChaelCodes/cornelius
+  elo: 1330.1
 - agent: dummy
   branch_init: human/joshhartmann11/battlejake2019
+  elo: 1338.8
 - agent: dummy
   branch_init: human/coreyja/famished-frank
+  elo: 1357.7
 - agent: dummy
   branch_init: human/kentmacdonald2/beames
+  elo: 1364.2
 - agent: dummy
   branch_init: human/TheApX/hungry
+  elo: 1369.7
 - agent: dummy
   branch_init: human/xtagon/nagini
+  elo: 1376.4
 - agent: dummy
   branch_init: human/joshhartmann11/battlejake
+  elo: 1381.1
 - agent: dummy
   branch_init: human/tyrelh/tyrelh-python
+  elo: 1383.5
 - agent: dummy
   branch_init: human/zakwht/zakwht-2018
+  elo: 1395.9
 - agent: dummy
   branch_init: human/rdbrck/bountysnake2018
+  elo: 1415.3
 - agent: dummy
   branch_init: human/JerryKott/jerrykott-2017
+  elo: 1427.7
 - agent: dummy
   branch_init: human/altersaddle/untimely-neglected-wearable
+  elo: 1447.8
 - agent: dummy
   branch_init: human/MorganConrad/sisiutl
+  elo: 1451.7
 - agent: dummy
   branch_init: human/tyrelh/tyrelh-2018
+  elo: 1457.2
 - agent: dummy
   branch_init: human/noahspriggs/tr-8r
+  elo: 1472.6
 - agent: dummy
   branch_init: human/woofers/woofers-java
+  elo: 1500.8
 - agent: dummy
   branch_init: human/Petah/project-z
+  elo: 1516.6
 - agent: dummy
   branch_init: human/tbgiles/feisty-snake
+  elo: 1518.8
 - agent: dummy
   branch_init: human/hirethissnake/sneaky-snake
+  elo: 1519.2
 - agent: dummy
   branch_init: human/aleksiy325/snek-two
+  elo: 1617.1
 - agent: dummy
   branch_init: human/tyrelh/tyrelh-2019
+  elo: 1631.7
 - agent: dummy
   branch_init: human/jhawthorn/snek
+  elo: 1814.4
 - agent: dummy
   branch_init: human/smallsco/robosnake
+  elo: 1882.8

@@ -1,230 +1,345 @@
 - agent: dummy
   branch_init: human/technischeinformatica/tearsofsteel
+  elo: -257
 - agent: dummy
   branch_init: human/wouterjoosse/infinitylock
+  elo: -257
 - agent: dummy
   branch_init: human/robo_code/sittingduck
+  elo: -113
 - agent: dummy
   branch_init: human/it_economics/ite_bomax
+  elo: -6
 - agent: dummy
   branch_init: human/trex22/deepthought
+  elo: 40
 - agent: dummy
   branch_init: human/pez/gf1
+  elo: 40
 - agent: dummy
   branch_init: human/linuxuser0/genetic
+  elo: 40
 - agent: dummy
   branch_init: human/kinnla/antiwalls
+  elo: 121
 - agent: dummy
   branch_init: human/barriosnahuel/tirolio
+  elo: 121
 - agent: dummy
   branch_init: human/pez/droidpoet
+  elo: 159
 - agent: dummy
   branch_init: human/robo_code/crazy
+  elo: 194
 - agent: dummy
   branch_init: human/it_economics/ite_claptrap
+  elo: 228
 - agent: dummy
   branch_init: human/it_economics/ite_ctbot
+  elo: 291
 - agent: dummy
   branch_init: human/it_economics/ite_simple
+  elo: 378
 - agent: dummy
   branch_init: human/it_economics/ite_terminator
+  elo: 378
 - agent: dummy
   branch_init: human/tibola/markiv
+  elo: 378
 - agent: dummy
   branch_init: human/robo_code/regullarmonk
+  elo: 432
 - agent: dummy
   branch_init: human/andrekorol/oppswantmedead
+  elo: 432
 - agent: dummy
   branch_init: human/robo_code/fire
+  elo: 458
 - agent: dummy
   branch_init: human/philipmjohnson/dacruzer
+  elo: 483
 - agent: dummy
   branch_init: human/alpian/ianstank
+  elo: 483
 - agent: dummy
   branch_init: human/andrekorol/myfirstkiller
+  elo: 534
 - agent: dummy
   branch_init: human/alpian/tarektank
+  elo: 555
 - agent: dummy
   branch_init: human/it_economics/ite_cliffbot2
+  elo: 555
 - agent: dummy
   branch_init: human/team488/meow
+  elo: 555
 - agent: dummy
   branch_init: human/robo_code/corners
+  elo: 610
 - agent: dummy
   branch_init: human/it_economics/ite_florian2
+  elo: 624
 - agent: dummy
   branch_init: human/robo_code/myfirstrobot
+  elo: 690
 - agent: dummy
   branch_init: human/kylebennett/gruffalo
+  elo: 704
 - agent: dummy
   branch_init: human/robo_code/ramfire
+  elo: 712
 - agent: dummy
   branch_init: human/rafaeljdesa/ultron
+  elo: 712
 - agent: dummy
   branch_init: human/kylebennett/hugbot
+  elo: 712
 - agent: dummy
   branch_init: human/andrekorol/exterminador
+  elo: 712
 - agent: dummy
   branch_init: human/robo_code/tracker
+  elo: 733
 - agent: dummy
   branch_init: human/luke_f_w/nagisphere
+  elo: 776
 - agent: dummy
   branch_init: human/robo_code/velocirobot
+  elo: 776
 - agent: dummy
   branch_init: human/avsthiago/sadbot
+  elo: 859
 - agent: dummy
   branch_init: human/looklazy/chilibot
+  elo: 859
 - agent: dummy
   branch_init: human/robo_code/spinbot
+  elo: 867
 - agent: dummy
   branch_init: human/iagomonteiro13579/npcsniper
+  elo: 880
 - agent: dummy
   branch_init: human/gabriel_lw/quadwall
+  elo: 880
 - agent: dummy
   branch_init: human/zcjerry229/markrobo
+  elo: 900
 - agent: dummy
   branch_init: human/dankraemer/juggernaut
+  elo: 941
 - agent: dummy
   branch_init: human/robo_code/trackfire
+  elo: 952
 - agent: dummy
   branch_init: human/joaomcarvalho/jeujdapeu
+  elo: 962
 - agent: dummy
   branch_init: human/it_economics/ite_m9
+  elo: 982
 - agent: dummy
   branch_init: human/admiralrasmussen/wavesurfing
+  elo: 1002
 - agent: dummy
   branch_init: human/tannerrogalsky/tannerbot1
+  elo: 1022
 - agent: dummy
   branch_init: human/vikdov/dominatorx
+  elo: 1121
 - agent: dummy
   branch_init: human/alexbay218/shreker
+  elo: 1121
 - agent: dummy
   branch_init: human/pez/wallspoet
+  elo: 1140
 - agent: dummy
   branch_init: human/josephjeon/gntest
+  elo: 1178
 - agent: dummy
   branch_init: human/kcanida/pikachu
+  elo: 1178
 - agent: dummy
   branch_init: human/mgalushka/maximbot
+  elo: 1215
 - agent: dummy
   branch_init: human/robo_code/walls
+  elo: 1215
 - agent: dummy
   branch_init: human/pez/wallspoetas
+  elo: 1252
 - agent: dummy
   branch_init: human/pez/leachpmc
+  elo: 1252
 - agent: dummy
   branch_init: human/txeverson/crawler
+  elo: 1252
 - agent: dummy
   branch_init: human/sacdalance/robrrrat
+  elo: 1270
 - agent: dummy
   branch_init: human/pez/haikuwalls
+  elo: 1323
 - agent: dummy
   branch_init: human/pez/smallpoet
+  elo: 1340
 - agent: dummy
   branch_init: human/gjgomez/mb2
+  elo: 1358
 - agent: dummy
   branch_init: human/miradoconsulting/roleksii
+  elo: 1358
 - agent: dummy
   branch_init: human/logancsc/dodgebot2
+  elo: 1375
 - agent: dummy
   branch_init: human/pez/poet
+  elo: 1392
 - agent: dummy
   branch_init: human/pez/wallspoethaiku
+  elo: 1392
 - agent: dummy
   branch_init: human/alexjamesmacpherson/wilde
+  elo: 1427
 - agent: dummy
   branch_init: human/pez/haikupoet
+  elo: 1427
 - agent: dummy
   branch_init: human/lucasgch/bt7274
+  elo: 1429
 - agent: dummy
   branch_init: human/denssle/megaborsten
+  elo: 1444
 - agent: dummy
   branch_init: human/mgalushka/superwalls
+  elo: 1444
 - agent: dummy
   branch_init: human/pmontp19/propiavancat
+  elo: 1461
 - agent: dummy
   branch_init: human/mcd8604/hunter
+  elo: 1478
 - agent: dummy
   branch_init: human/johan_adriaans/berendbotje
+  elo: 1495
 - agent: dummy
   branch_init: human/john_paul_r/vergere
+  elo: 1512
 - agent: dummy
   branch_init: human/pez/littleevilbrother
+  elo: 1512
 - agent: dummy
   branch_init: human/pez/icarus
+  elo: 1514
 - agent: dummy
   branch_init: human/muzardo/trianglehunter
+  elo: 1529
 - agent: dummy
   branch_init: human/mgalushka/superspinbot
+  elo: 1563
 - agent: dummy
   branch_init: human/u_0x65_e/kokomo
+  elo: 1633
 - agent: dummy
   branch_init: human/mgalushka/supercorners
+  elo: 1651
 - agent: dummy
   branch_init: human/pseminatore/dodgebot_jnk
+  elo: 1651
 - agent: dummy
   branch_init: human/mgalushka/supercrazy
+  elo: 1668
 - agent: dummy
   branch_init: human/mgalushka/supertracker
+  elo: 1686
 - agent: dummy
   branch_init: human/vftheodoro/barbiescript
+  elo: 1705
 - agent: dummy
   branch_init: human/pez/leach
+  elo: 1723
 - agent: dummy
   branch_init: human/g_otn/reimu
+  elo: 1723
 - agent: dummy
   branch_init: human/joaocarpim/wrecker
+  elo: 1723
 - agent: dummy
   branch_init: human/pez/marshmallow
+  elo: 1739
 - agent: dummy
   branch_init: human/pez/littlebrother
+  elo: 1742
 - agent: dummy
   branch_init: human/admiralrasmussen/hawkonfire
+  elo: 1761
 - agent: dummy
   branch_init: human/pez/hypoleach
+  elo: 1761
 - agent: dummy
   branch_init: human/pez/blackwidow
+  elo: 1780
 - agent: dummy
   branch_init: human/pranav_prakash/thecarver
+  elo: 1800
 - agent: dummy
   branch_init: human/pez/vertimicro
+  elo: 1820
 - agent: dummy
   branch_init: human/mgalushka/superramfire
+  elo: 1841
 - agent: dummy
   branch_init: human/mgalushka/supermercutio
+  elo: 1862
 - agent: dummy
   branch_init: human/zhiwei121/hero_pm
+  elo: 1881
 - agent: dummy
   branch_init: human/jonharder/starterbot
+  elo: 1929
 - agent: dummy
   branch_init: human/pez/gouldingi
+  elo: 1929
 - agent: dummy
   branch_init: human/pez/tityus
+  elo: 1977
 - agent: dummy
   branch_init: human/pez/blackwidow_mini
+  elo: 2003
 - agent: dummy
   branch_init: human/pez/frankie
+  elo: 2003
 - agent: dummy
   branch_init: human/pez/mako
+  elo: 2030
 - agent: dummy
   branch_init: human/pez/chironex_micro
+  elo: 2031
 - agent: dummy
   branch_init: human/pez/vertileach
+  elo: 2187
 - agent: dummy
   branch_init: human/namnguyenthanhwork/cham
+  elo: 2188
 - agent: dummy
   branch_init: human/pez/paolo
+  elo: 2268
 - agent: dummy
   branch_init: human/pez/chironex_mini
+  elo: 2268
 - agent: dummy
   branch_init: human/pez/aristocles
+  elo: 2312
 - agent: dummy
   branch_init: human/winstliu/bobthebuilder
+  elo: 2312
 - agent: dummy
   branch_init: human/ur4n0_235/ur4no
+  elo: 2416
 - agent: dummy
   branch_init: human/admiralrasmussen/drussgt
+  elo: 2551
 - agent: dummy
   branch_init: human/pez/swiffer
+  elo: 2637
 - agent: dummy
   branch_init: human/pez/pugilist
+  elo: 2757

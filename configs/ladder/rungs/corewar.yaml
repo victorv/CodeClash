@@ -1,528 +1,792 @@
 - agent: dummy
   branch_init: human/pspace
+  elo: -889.5
 - agent: dummy
   branch_init: human/validate
+  elo: 344.1
 - agent: dummy
   branch_init: human/dwarf
+  elo: 864.3
 - agent: dummy
   branch_init: human/smoothnoodlemap
+  elo: 887.8
 - agent: dummy
   branch_init: human/smoothnoodlemap6
+  elo: 909.9
 - agent: dummy
   branch_init: human/returnofthelivingdead
+  elo: 955.5
 - agent: dummy
   branch_init: human/notepaper
+  elo: 967.6
 - agent: dummy
   branch_init: human/vagabond
+  elo: 1001.0
 - agent: dummy
   branch_init: human/genocide
+  elo: 1015.6
 - agent: dummy
   branch_init: human/paratroopsv21
+  elo: 1017.9
 - agent: dummy
   branch_init: human/trinity
+  elo: 1022.7
 - agent: dummy
   branch_init: human/precipice
+  elo: 1025.0
 - agent: dummy
   branch_init: human/hydra
+  elo: 1026.4
 - agent: dummy
   branch_init: human/flypaper30
+  elo: 1040.7
 - agent: dummy
   branch_init: human/gammapaper30
+  elo: 1045.4
 - agent: dummy
   branch_init: human/flashpaper37
+  elo: 1045.9
 - agent: dummy
   branch_init: human/flashpaper
+  elo: 1046.7
 - agent: dummy
   branch_init: human/fastfoodv21
+  elo: 1056.8
 - agent: dummy
   branch_init: human/twilightpitsv60
+  elo: 1060.2
 - agent: dummy
   branch_init: human/0stormbringer
+  elo: 1065.0
 - agent: dummy
   branch_init: human/backstabber
+  elo: 1066.2
 - agent: dummy
   branch_init: human/impurge
+  elo: 1067.2
 - agent: dummy
   branch_init: human/requestv20
+  elo: 1076.7
 - agent: dummy
   branch_init: human/griffin2
+  elo: 1083.7
 - agent: dummy
   branch_init: human/imprimis6
+  elo: 1084.4
 - agent: dummy
   branch_init: human/killerinstinct
+  elo: 1088.4
 - agent: dummy
   branch_init: human/crimp
+  elo: 1090.7
 - agent: dummy
   branch_init: human/crimp2
+  elo: 1092.1
 - agent: dummy
   branch_init: human/bscannersliveinvain
+  elo: 1094.9
 - agent: dummy
   branch_init: human/charonv70
+  elo: 1095.4
 - agent: dummy
   branch_init: human/nomuckingabout
+  elo: 1096.6
 - agent: dummy
   branch_init: human/leprechaun1b
+  elo: 1106.0
 - agent: dummy
   branch_init: human/charonv81
+  elo: 1113.2
 - agent: dummy
   branch_init: human/keystonet13
+  elo: 1113.6
 - agent: dummy
   branch_init: human/rave
+  elo: 1115.5
 - agent: dummy
   branch_init: human/sphinxv28
+  elo: 1118.6
 - agent: dummy
   branch_init: human/hordesofmicrowarriors
+  elo: 1121.1
 - agent: dummy
   branch_init: human/ncdecoy
+  elo: 1122.2
 - agent: dummy
   branch_init: human/agony31
+  elo: 1122.2
 - agent: dummy
   branch_init: human/medusasv7x
+  elo: 1122.7
 - agent: dummy
   branch_init: human/sj4a
+  elo: 1123.4
 - agent: dummy
   branch_init: human/capskeyisstuck
+  elo: 1124.2
 - agent: dummy
   branch_init: human/thermite10
+  elo: 1124.5
 - agent: dummy
   branch_init: human/ttti
+  elo: 1127.0
 - agent: dummy
   branch_init: human/agony51
+  elo: 1128.4
 - agent: dummy
   branch_init: human/stasis
+  elo: 1130.1
 - agent: dummy
   branch_init: human/leprechaunonspeed
+  elo: 1130.5
 - agent: dummy
   branch_init: human/blur88
+  elo: 1132.1
 - agent: dummy
   branch_init: human/winterwerewolf3
+  elo: 1133.0
 - agent: dummy
   branch_init: human/lucky3
+  elo: 1133.3
 - agent: dummy
   branch_init: human/cannonade
+  elo: 1133.5
 - agent: dummy
   branch_init: human/kitchensinkii
+  elo: 1136.9
 - agent: dummy
   branch_init: human/seventyfive
+  elo: 1137.6
 - agent: dummy
   branch_init: human/fatexpansionv
+  elo: 1138.7
 - agent: dummy
   branch_init: human/irongate
+  elo: 1141.6
 - agent: dummy
   branch_init: human/snake
+  elo: 1143.9
 - agent: dummy
   branch_init: human/leapfrog
+  elo: 1144.4
 - agent: dummy
   branch_init: human/chimerav35
+  elo: 1146.0
 - agent: dummy
   branch_init: human/leviathan
+  elo: 1146.3
 - agent: dummy
   branch_init: human/pacman
+  elo: 1148.8
 - agent: dummy
   branch_init: human/heremscimitar
+  elo: 1149.2
 - agent: dummy
   branch_init: human/elementaldust2
+  elo: 1149.5
 - agent: dummy
   branch_init: human/foggyswamp
+  elo: 1149.9
 - agent: dummy
   branch_init: human/armorya5
+  elo: 1149.9
 - agent: dummy
   branch_init: human/beholderseye17
+  elo: 1150.3
 - agent: dummy
   branch_init: human/phq
+  elo: 1155.3
 - agent: dummy
   branch_init: human/abomination
+  elo: 1155.6
 - agent: dummy
   branch_init: human/steppingstone
+  elo: 1157.2
 - agent: dummy
   branch_init: human/agonyii
+  elo: 1158.8
 - agent: dummy
   branch_init: human/twister
+  elo: 1161.1
 - agent: dummy
   branch_init: human/evoltmp88
+  elo: 1162.1
 - agent: dummy
   branch_init: human/gothik
+  elo: 1164.0
 - agent: dummy
   branch_init: human/quiz
+  elo: 1167.8
 - agent: dummy
   branch_init: human/aeka
+  elo: 1170.6
 - agent: dummy
   branch_init: human/vamp02b
+  elo: 1171.2
 - agent: dummy
   branch_init: human/replicant
+  elo: 1172.5
 - agent: dummy
   branch_init: human/gemoftheocean
+  elo: 1173.9
 - agent: dummy
   branch_init: human/thermiteii
+  elo: 1175.2
 - agent: dummy
   branch_init: human/blur
+  elo: 1175.3
 - agent: dummy
   branch_init: human/blur2
+  elo: 1176.4
 - agent: dummy
   branch_init: human/flurry
+  elo: 1177.2
 - agent: dummy
   branch_init: human/mirage2
+  elo: 1178.7
 - agent: dummy
   branch_init: human/nightofthelivingdead
+  elo: 1178.7
 - agent: dummy
   branch_init: human/mirage15
+  elo: 1178.8
 - agent: dummy
   branch_init: human/soldieroffortune
+  elo: 1179.0
 - agent: dummy
   branch_init: human/win
+  elo: 1181.2
 - agent: dummy
   branch_init: human/icedragon
+  elo: 1182.6
 - agent: dummy
   branch_init: human/onebite
+  elo: 1183.8
 - agent: dummy
   branch_init: human/myvamp37
+  elo: 1184.3
 - agent: dummy
   branch_init: human/bluefunk
+  elo: 1184.6
 - agent: dummy
   branch_init: human/tornado30
+  elo: 1184.8
 - agent: dummy
   branch_init: human/mason20
+  elo: 1185.1
 - agent: dummy
   branch_init: human/bayonet
+  elo: 1188.4
 - agent: dummy
   branch_init: human/tnt
+  elo: 1189.1
 - agent: dummy
   branch_init: human/zygote
+  elo: 1189.7
 - agent: dummy
   branch_init: human/stalker
+  elo: 1189.8
 - agent: dummy
   branch_init: human/julietandpaper
+  elo: 1190.4
 - agent: dummy
   branch_init: human/thenextstep88
+  elo: 1191.3
 - agent: dummy
   branch_init: human/chameleon
+  elo: 1191.7
 - agent: dummy
   branch_init: human/stoninc
+  elo: 1192.2
 - agent: dummy
   branch_init: human/claw
+  elo: 1192.4
 - agent: dummy
   branch_init: human/myvamp54
+  elo: 1192.5
 - agent: dummy
   branch_init: human/infiltrator
+  elo: 1193.1
 - agent: dummy
   branch_init: human/yogibear
+  elo: 1193.5
 - agent: dummy
   branch_init: human/grilledoctopus05
+  elo: 1194.4
 - agent: dummy
   branch_init: human/intotheunknown
+  elo: 1195.6
 - agent: dummy
   branch_init: human/probe
+  elo: 1196.3
 - agent: dummy
   branch_init: human/torcht18
+  elo: 1197.0
 - agent: dummy
   branch_init: human/damageincorporated
+  elo: 1197.6
 - agent: dummy
   branch_init: human/lithium
+  elo: 1197.8
 - agent: dummy
   branch_init: human/bluefunk3
+  elo: 1198.3
 - agent: dummy
   branch_init: human/labomba
+  elo: 1198.8
 - agent: dummy
   branch_init: human/sneakyb2
+  elo: 1198.8
 - agent: dummy
   branch_init: human/hazyshadeii
+  elo: 1199.0
 - agent: dummy
   branch_init: human/blizzard
+  elo: 1199.8
 - agent: dummy
   branch_init: human/jackintheboxii
+  elo: 1200.5
 - agent: dummy
   branch_init: human/recon2
+  elo: 1201.0
 - agent: dummy
   branch_init: human/curseoftheundead
+  elo: 1203.9
 - agent: dummy
   branch_init: human/bloodlust
+  elo: 1204.1
 - agent: dummy
   branch_init: human/eternalexile
+  elo: 1204.5
 - agent: dummy
   branch_init: human/sprawlingchaos
+  elo: 1204.7
 - agent: dummy
   branch_init: human/zooom
+  elo: 1204.8
 - agent: dummy
   branch_init: human/vampsareback02
+  elo: 1205.1
 - agent: dummy
   branch_init: human/jinx
+  elo: 1207.0
 - agent: dummy
   branch_init: human/pendulum
+  elo: 1207.4
 - agent: dummy
   branch_init: human/nosferatu
+  elo: 1208.1
 - agent: dummy
   branch_init: human/boysarebackintown
+  elo: 1208.8
 - agent: dummy
   branch_init: human/discord
+  elo: 1209.7
 - agent: dummy
   branch_init: human/jackinthebox
+  elo: 1210.4
 - agent: dummy
   branch_init: human/barrage
+  elo: 1211.1
 - agent: dummy
   branch_init: human/perseus
+  elo: 1211.7
 - agent: dummy
   branch_init: human/kusanagi
+  elo: 1212.8
 - agent: dummy
   branch_init: human/simple88v2
+  elo: 1212.9
 - agent: dummy
   branch_init: human/excalibur
+  elo: 1213.3
 - agent: dummy
   branch_init: human/carmilla
+  elo: 1213.4
 - agent: dummy
   branch_init: human/bpanamax
+  elo: 1213.9
 - agent: dummy
   branch_init: human/oblivion
+  elo: 1214.1
 - agent: dummy
   branch_init: human/hector2
+  elo: 1215.3
 - agent: dummy
   branch_init: human/xenosmilus
+  elo: 1217.3
 - agent: dummy
   branch_init: human/macromagic
+  elo: 1218.0
 - agent: dummy
   branch_init: human/whitemist
+  elo: 1218.3
 - agent: dummy
   branch_init: human/fireandice
+  elo: 1218.5
 - agent: dummy
   branch_init: human/grendelsrevenge
+  elo: 1218.8
 - agent: dummy
   branch_init: human/herbalavenger
+  elo: 1219.3
 - agent: dummy
   branch_init: human/unpit
+  elo: 1219.5
 - agent: dummy
   branch_init: human/dust07
+  elo: 1220.6
 - agent: dummy
   branch_init: human/alladinscave
+  elo: 1220.8
 - agent: dummy
   branch_init: human/hazylazyc11
+  elo: 1221.5
 - agent: dummy
   branch_init: human/bigitalshot
+  elo: 1221.9
 - agent: dummy
   branch_init: human/shottonothing
+  elo: 1222.1
 - agent: dummy
   branch_init: human/hazylazy
+  elo: 1223.3
 - agent: dummy
   branch_init: human/valkyrie
+  elo: 1223.5
 - agent: dummy
   branch_init: human/enigma
+  elo: 1223.8
 - agent: dummy
   branch_init: human/lithobolia
+  elo: 1224.1
 - agent: dummy
   branch_init: human/electrichead
+  elo: 1225.2
 - agent: dummy
   branch_init: human/arrow
+  elo: 1225.5
 - agent: dummy
   branch_init: human/blade
+  elo: 1227.2
 - agent: dummy
   branch_init: human/vanquisher
+  elo: 1227.7
 - agent: dummy
   branch_init: human/unpitq
+  elo: 1227.8
 - agent: dummy
   branch_init: human/sputnik
+  elo: 1228.3
 - agent: dummy
   branch_init: human/forgottenlore
+  elo: 1228.4
 - agent: dummy
   branch_init: human/returnofvanquisher
+  elo: 1229.9
 - agent: dummy
   branch_init: human/behemot
+  elo: 1230.5
 - agent: dummy
   branch_init: human/impfinityv4g1
+  elo: 1232.7
 - agent: dummy
   branch_init: human/torment
+  elo: 1234.1
 - agent: dummy
   branch_init: human/falconv03
+  elo: 1236.2
 - agent: dummy
   branch_init: human/borg
+  elo: 1236.7
 - agent: dummy
   branch_init: human/thehistorian
+  elo: 1236.9
 - agent: dummy
   branch_init: human/nightterrors
+  elo: 1238.1
 - agent: dummy
   branch_init: human/hellfire
+  elo: 1239.7
 - agent: dummy
   branch_init: human/revivalfire
+  elo: 1240.3
 - agent: dummy
   branch_init: human/timescape10
+  elo: 1243.4
 - agent: dummy
   branch_init: human/forgottenlore2
+  elo: 1244.3
 - agent: dummy
   branch_init: human/electricrazor
+  elo: 1244.8
 - agent: dummy
   branch_init: human/freighttrain
+  elo: 1245.4
 - agent: dummy
   branch_init: human/digitalis2003
+  elo: 1245.4
 - agent: dummy
   branch_init: human/kryptonite
+  elo: 1250.0
 - agent: dummy
   branch_init: human/riseofthedragon
+  elo: 1252.6
 - agent: dummy
   branch_init: human/bluecandle
+  elo: 1253.0
 - agent: dummy
   branch_init: human/rosebud
+  elo: 1255.2
 - agent: dummy
   branch_init: human/slimetest
+  elo: 1255.3
 - agent: dummy
   branch_init: human/quicksilver
+  elo: 1255.7
 - agent: dummy
   branch_init: human/stormkeeper
+  elo: 1256.1
 - agent: dummy
   branch_init: human/ompega
+  elo: 1258.2
 - agent: dummy
   branch_init: human/nemesis
+  elo: 1258.5
 - agent: dummy
   branch_init: human/fixed
+  elo: 1258.7
 - agent: dummy
   branch_init: human/evolcap66
+  elo: 1259.3
 - agent: dummy
   branch_init: human/retroq
+  elo: 1259.8
 - agent: dummy
   branch_init: human/devilish202
+  elo: 1261.4
 - agent: dummy
   branch_init: human/sunset
+  elo: 1261.6
 - agent: dummy
   branch_init: human/blacken
+  elo: 1262.7
 - agent: dummy
   branch_init: human/nighttrain
+  elo: 1263.0
 - agent: dummy
   branch_init: human/diehard
+  elo: 1264.2
 - agent: dummy
   branch_init: human/bulldozed
+  elo: 1265.7
 - agent: dummy
   branch_init: human/revengeofthepapers
+  elo: 1267.4
 - agent: dummy
   branch_init: human/uninvited
+  elo: 1267.6
 - agent: dummy
   branch_init: human/disharmonious
+  elo: 1267.6
 - agent: dummy
   branch_init: human/bitethebullet
+  elo: 1268.3
 - agent: dummy
   branch_init: human/vain
+  elo: 1268.8
 - agent: dummy
   branch_init: human/luca
+  elo: 1268.9
 - agent: dummy
   branch_init: human/jade
+  elo: 1272.7
 - agent: dummy
   branch_init: human/recycledbits
+  elo: 1273.1
 - agent: dummy
   branch_init: human/spiritualblackdimension
+  elo: 1276.2
 - agent: dummy
   branch_init: human/themystery
+  elo: 1278.0
 - agent: dummy
   branch_init: human/unrequitedlove
+  elo: 1279.4
 - agent: dummy
   branch_init: human/borgir
+  elo: 1283.6
 - agent: dummy
   branch_init: human/gremlin
+  elo: 1285.1
 - agent: dummy
   branch_init: human/gigolo
+  elo: 1286.8
 - agent: dummy
   branch_init: human/ironicimps
+  elo: 1287.6
 - agent: dummy
   branch_init: human/stylizedeuphoria
+  elo: 1288.7
 - agent: dummy
   branch_init: human/ziggy
+  elo: 1289.0
 - agent: dummy
   branch_init: human/impishv02
+  elo: 1289.2
 - agent: dummy
   branch_init: human/thunderstrike
+  elo: 1289.6
 - agent: dummy
   branch_init: human/eccentric
+  elo: 1290.0
 - agent: dummy
   branch_init: human/hullabaloo
+  elo: 1290.9
 - agent: dummy
   branch_init: human/safetyinnumbers
+  elo: 1295.4
 - agent: dummy
   branch_init: human/mandragora
+  elo: 1296.4
 - agent: dummy
   branch_init: human/gargantuan
+  elo: 1297.8
 - agent: dummy
   branch_init: human/elvenking
+  elo: 1298.3
 - agent: dummy
   branch_init: human/npaperii
+  elo: 1300.7
 - agent: dummy
   branch_init: human/hullab3loo
+  elo: 1301.0
 - agent: dummy
   branch_init: human/reepicheep
+  elo: 1301.3
 - agent: dummy
   branch_init: human/halcyon
+  elo: 1303.2
 - agent: dummy
   branch_init: human/olivia
+  elo: 1303.2
 - agent: dummy
   branch_init: human/neith
+  elo: 1304.3
 - agent: dummy
   branch_init: human/numb
+  elo: 1305.0
 - agent: dummy
   branch_init: human/returnofthependragon
+  elo: 1306.9
 - agent: dummy
   branch_init: human/cinammon
+  elo: 1309.9
 - agent: dummy
   branch_init: human/combatra
+  elo: 1313.2
 - agent: dummy
   branch_init: human/armadillo
+  elo: 1313.3
 - agent: dummy
   branch_init: human/simplicity
+  elo: 1314.0
 - agent: dummy
   branch_init: human/kosmos
+  elo: 1319.4
 - agent: dummy
   branch_init: human/azathoth
+  elo: 1320.9
 - agent: dummy
   branch_init: human/danceoffallenangels
+  elo: 1324.6
 - agent: dummy
   branch_init: human/returnofthejedimp
+  elo: 1326.9
 - agent: dummy
   branch_init: human/blowrag
+  elo: 1329.2
 - agent: dummy
   branch_init: human/artofcorewar
+  elo: 1331.9
 - agent: dummy
   branch_init: human/silking
+  elo: 1332.1
 - agent: dummy
   branch_init: human/goldeneye
+  elo: 1335.4
 - agent: dummy
   branch_init: human/dawn
+  elo: 1339.8
 - agent: dummy
   branch_init: human/sonofvain
+  elo: 1340.3
 - agent: dummy
   branch_init: human/blackknight
+  elo: 1342.6
 - agent: dummy
   branch_init: human/thefugitive
+  elo: 1346.3
 - agent: dummy
   branch_init: human/frothandfizzle
+  elo: 1346.6
 - agent: dummy
   branch_init: human/snowscan
+  elo: 1350.6
 - agent: dummy
   branch_init: human/rust
+  elo: 1350.8
 - agent: dummy
   branch_init: human/lastjudgement
+  elo: 1351.7
 - agent: dummy
   branch_init: human/pdqscan
+  elo: 1358.1
 - agent: dummy
   branch_init: human/mercenary
+  elo: 1361.5
 - agent: dummy
   branch_init: human/dawn2
+  elo: 1362.2
 - agent: dummy
   branch_init: human/firestorm
+  elo: 1364.8
 - agent: dummy
   branch_init: human/defensive
+  elo: 1365.0
 - agent: dummy
   branch_init: human/burningmetal
+  elo: 1367.7
 - agent: dummy
   branch_init: human/chainlockv02a
+  elo: 1370.0
 - agent: dummy
   branch_init: human/decoysignal
+  elo: 1372.2
 - agent: dummy
   branch_init: human/cloudburst
+  elo: 1376.9
 - agent: dummy
   branch_init: human/mascafe
+  elo: 1379.6
 - agent: dummy
   branch_init: human/devilstick
+  elo: 1384.7
 - agent: dummy
   branch_init: human/unheardof
+  elo: 1385.3
 - agent: dummy
   branch_init: human/returnofthefugitive
+  elo: 1386.1
 - agent: dummy
   branch_init: human/silkworm
+  elo: 1392.2
 - agent: dummy
   branch_init: human/maelstrom
+  elo: 1396.0
 - agent: dummy
   branch_init: human/forjohn
+  elo: 1401.9
 - agent: dummy
   branch_init: human/toxic
+  elo: 1408.7
