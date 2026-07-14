@@ -236,9 +236,10 @@ class Player(ABC):
             "git for-each-ref --format='%(refname)' refs/remotes refs/tags | xargs -r -n1 git update-ref -d",
             "git reflog expire --expire=now --all",
             "git gc --prune=now --quiet",
+            "rm -f .git/FETCH_HEAD .git/ORIG_HEAD",
         ]:
             self.environment.execute(cmd)
-        self.logger.info("Isolated git: removed origin + opponent branches/tags (anti-cheat)")
+        self.logger.info("Isolated git: removed origin + opponent branches/tags + FETCH_HEAD (anti-cheat)")
 
     def _commit(self) -> None:
         """Commit changes to the agent's codebase."""
