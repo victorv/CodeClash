@@ -17,6 +17,13 @@ RC_FILE = Path("MyTank.java")
 SIMS_PER_RUN = 10
 
 
+def _java_pkg(name: str) -> str:
+    """Robocode robots are Java classes and the agent name becomes their package.
+    Map any non-identifier char to ``_`` and avoid a leading digit."""
+    pkg = re.sub(r"[^0-9A-Za-z_]", "_", name)
+    return pkg if not pkg[:1].isdigit() else f"b_{pkg}"
+
+
 class RoboCodeArena(CodeArena):
     name: str = "RoboCode"
     description: str = f"""Robocode is a programming game where your code IS the tank. This is classic
@@ -98,17 +105,18 @@ Keep the main bot class named `{str(RC_FILE)}`, but you can include additional J
 
     def execute_round(self, agents: list[Player]):
         for agent in agents:
+            pkg = _java_pkg(agent.name)  # valid Java package (agent.name may contain hyphens)
             # Copy the agent codebase into the game codebase and compile it
             for cmd in [
-                f"mkdir -p robots/{agent.name}",
-                f"cp -r /{agent.name}/robots/custom/* robots/{agent.name}/",
-                f"find robots/{agent.name}/ -name '*.java' -exec sed -i 's/custom/{agent.name}/g' {{}} +",
-                f'javac -cp "libs/robocode.jar" robots/{agent.name}/*.java',
+                f"mkdir -p robots/{pkg}",
+                f"cp -r /{agent.name}/robots/custom/* robots/{pkg}/",
+                f"find robots/{pkg}/ -name '*.java' -exec sed -i 's/custom/{pkg}/g' {{}} +",
+                f'javac -cp "libs/robocode.jar" robots/{pkg}/*.java',
             ]:
                 self.environment.execute(cmd)
 
-        # Create .battle file
-        selected_robots = ",".join([f"{agent.name}.{RC_FILE.stem}*" for agent in agents])
+        # Create .battle file (robot fully-qualified name uses the sanitized package)
+        selected_robots = ",".join([f"{_java_pkg(agent.name)}.{RC_FILE.stem}*" for agent in agents])
         # Use timestamp for unique battle file name since rounds are managed by tournament
         battle_file = f"{self.game_id}-battle{int(time.time())}.battle"
         battle_content = f"""#Battle Properties
@@ -158,6 +166,7 @@ robocode.battle.selectedRobots={selected_robots}
 
     def get_results(self, agents: list[Player], round_num: int, stats: RoundStats):
         scores = defaultdict(int)
+        pkg_to_name = {_java_pkg(a.name): a.name for a in agents}  # map sanitized package back to agent.name
         for idx in range(self.game_config.get("sims_per_round", 100) // SIMS_PER_RUN):
             with open(self.log_round(round_num) / f"results_{idx}.txt") as f:
                 result_output = f.read()
@@ -169,7 +178,8 @@ robocode.battle.selectedRobots={selected_robots}
                     continue
                 match = re.search(r"(\d+)\S+\:\s(\S+)\s+(\d+)", line)
                 if match:
-                    player = match.group(2).rsplit(".", 1)[0]
+                    parsed = match.group(2).rsplit(".", 1)[0]
+                    player = pkg_to_name.get(parsed, parsed)  # back to agent.name (player_stats key)
                     scores[player] += int(match.group(3))
 
         stats.winner = max(scores, key=scores.get)

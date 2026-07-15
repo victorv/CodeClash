@@ -53,6 +53,10 @@ def get_replayer(arena: str) -> ReplayRenderer | None:
         from codeclash.arenas.robocode.replay import RoboCodeReplayer
 
         return RoboCodeReplayer()
+    if arena == "CoreWar":
+        from codeclash.arenas.corewar.replay import CoreWarReplayer
+
+        return CoreWarReplayer()
     if arena == "Chess":
         from codeclash.arenas.chess.replay import ChessReplayer
 
