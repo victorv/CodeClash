@@ -9,7 +9,7 @@ game:
   args:
     nodisplay: true
     nosound: true
-  record_ratio: 0.2
+  record_ratio: 1
 player:
   agent: mini
   name: gemini-3-5-flash

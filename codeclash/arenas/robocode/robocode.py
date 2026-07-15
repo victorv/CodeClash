@@ -10,6 +10,7 @@ from tqdm.auto import tqdm
 
 from codeclash.agents.player import Player
 from codeclash.arenas.arena import CodeArena, RoundStats
+from codeclash.arenas.robocode.trace import process_record, write_aggregate_trace
 from codeclash.utils.environment import create_file_in_container
 
 RC_FILE = Path("MyTank.java")
@@ -79,8 +80,10 @@ Keep the main bot class named `{str(RC_FILE)}`, but you can include additional J
         rc_results = self.log_env / f"results_{idx}.txt"
         rc_record = self.log_env / f"record_{idx}.xml"
         cmd = f"{cmd} -results {rc_results}"
-        if random.random() < self.game_config.get("record_ratio", 1):
-            # Only record a fraction of simulations to save space
+        # Always record one representative battle (idx 0) per round so the model and the replay
+        # viewer get behavioral traces; record extra battles only if record_ratio is raised.
+        # Each recorded battle's raw XML is later parsed into compact sim/trace files and deleted.
+        if idx == 0 or random.random() < self.game_config.get("record_ratio", 0):
             cmd = f"{cmd} -recordXML {rc_record}"
         try:
             output = self.environment.execute(cmd, timeout=120)
@@ -127,6 +130,31 @@ robocode.battle.selectedRobots={selected_robots}
             # Collect results as they complete
             for future in tqdm(as_completed(futures), total=len(futures)):
                 future.result()
+
+    def copy_logs_from_env(self, round_num: int) -> None:
+        """Copy the round's raw logs to the host, then distill each recorded battle's
+        (enormous, ~30 MB) ``record_{idx}.xml`` into compact per-round ``sim_{n}.jsonl`` files
+        (the single source for both the agent-facing behavioral trace and the replay viewer),
+        and pool every recorded game into one readable ``trace.md``. The raw XML is deleted
+        afterwards so it never bloats the logs shipped to the competing agents."""
+        super().copy_logs_from_env(round_num)
+        round_dir = self.log_round(round_num)
+        summaries = []
+        for xml in sorted(round_dir.glob("record_*.xml")):
+            match = re.search(r"record_(\d+)\.xml", xml.name)
+            if not match:
+                continue
+            try:
+                summaries.extend(process_record(xml, round_dir, int(match.group(1)), SIMS_PER_RUN))
+            except Exception as e:
+                self.logger.warning(f"Failed to distill RoboCode sims from {xml.name}: {e}")
+            finally:
+                xml.unlink(missing_ok=True)
+        if summaries:
+            try:
+                write_aggregate_trace(round_dir, summaries, self.game_config.get("sims_per_round", 100))
+            except Exception as e:
+                self.logger.warning(f"Failed to write aggregate RoboCode trace: {e}")
 
     def get_results(self, agents: list[Player], round_num: int, stats: RoundStats):
         scores = defaultdict(int)
