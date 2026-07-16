@@ -10,6 +10,20 @@ from minisweagent.environments.docker import DockerEnvironment
 # Patterns to exclude when copying between containers
 COPY_EXCLUDE_PATTERNS = [".git", "__pycache__"]
 
+# Secret env vars whose values must never be recorded in command output / trajectories.
+_SECRET_ENV_VARS = ("GITHUB_TOKEN", "LLAMA_API_KEY")
+
+
+def redact_secrets(text: str | None) -> str | None:
+    """Replace known secret values with a placeholder so they never land in recorded output."""
+    if not text:
+        return text
+    for var in _SECRET_ENV_VARS:
+        val = os.getenv(var)
+        if val and val in text:
+            text = text.replace(val, f"<REDACTED_{var}>")
+    return text
+
 
 def _scratch_dir() -> str | None:
     """Local scratch dir for staging `docker cp` transfers. Defaults to the system temp dir.
@@ -30,12 +44,15 @@ class ClashDockerEnvironment(DockerEnvironment):
     def execute(self, action: str | dict, cwd: str = "", *, timeout: int | None = None) -> dict:
         if isinstance(action, str):
             action = {"command": action}
-        return super().execute(action, cwd, timeout=timeout)
+        result = super().execute(action, cwd, timeout=timeout)
+        if isinstance(result, dict) and result.get("output"):
+            result["output"] = redact_secrets(result["output"])
+        return result
 
 
 def assert_zero_exit_code(result: dict, *, logger: logging.Logger | None = None) -> dict:
     if result.get("returncode", 0) != 0:
-        msg = f"Command failed with exit code {result.get('returncode')}:\n{result.get('output')}"
+        msg = f"Command failed with exit code {result.get('returncode')}:\n{redact_secrets(result.get('output'))}"
         if logger is not None:
             logger.error(msg)
         raise RuntimeError(msg)
